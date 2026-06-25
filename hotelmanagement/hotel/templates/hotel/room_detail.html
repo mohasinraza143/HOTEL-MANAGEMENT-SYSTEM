@@ -1,0 +1,88 @@
+{% extends 'hotel/base.html' %}
+
+{% block title %}Aurora Haven | Room {{ room.room_number }}{% endblock %}
+
+{% block content %}
+<section class="container detail-page section-space-small">
+    <div class="detail-page-head">
+        <div>
+            <span class="section-tag">Room Details</span>
+            <h1>{{ room.category.name }}</h1>
+            <p>Room {{ room.room_number }} with clear pricing, room details, and direct booking action.</p>
+        </div>
+        <div class="detail-price-card">
+            <small>Price per night</small>
+            <strong>${{ room.price }}</strong>
+            <span class="availability-badge {% if room.availability %}available{% else %}unavailable{% endif %}">
+                {% if room.availability %}Available{% else %}Unavailable{% endif %}
+            </span>
+        </div>
+    </div>
+
+    <div class="detail-layout">
+        <div class="detail-media">
+            <img src="/static/images/room1.webp" alt="Room {{ room.room_number }}">
+        </div>
+
+        <div class="detail-copy">
+            <p class="detail-description">{{ room.description }}</p>
+
+            <div class="detail-points">
+                <div>
+                    <span>Room number</span>
+                    <strong>{{ room.room_number }}</strong>
+                </div>
+                <div>
+                    <span>Category</span>
+                    <strong>{{ room.category.name }}</strong>
+                </div>
+                <div>
+                    <span>Status</span>
+                    <strong>{% if room.availability %}Available now{% else %}Sold out{% endif %}</strong>
+                </div>
+            </div>
+
+            <div class="room-feature-strip detail-strip">
+                <span>Free Wi-Fi</span>
+                <span>Breakfast available</span>
+                <span>Flexible check-in</span>
+                <span>Private room</span>
+            </div>
+
+            <div class="card-actions">
+                <a class="btn btn-primary" href="{% url 'book_room' room.id %}">Book This Room</a>
+                <a class="btn btn-secondary" href="{% url 'rooms' %}">Back to Rooms</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if similar_rooms %}
+<section class="container section-space-small">
+    <div class="section-heading">
+        <div>
+            <span class="section-tag">Similar Rooms</span>
+            <h2>More options you may like</h2>
+        </div>
+    </div>
+
+    <div class="featured-room-grid">
+        {% for similar_room in similar_rooms %}
+            <article class="room-card compact-room-card">
+                <div class="room-thumb-wrap">
+                    <img src="{{ similar_room.image }}" alt="Room {{ similar_room.room_number }}">
+                </div>
+                <div class="room-card-body">
+                    <p class="room-category">{{ similar_room.category.name }}</p>
+                    <h3>Room {{ similar_room.room_number }}</h3>
+                    <div class="room-card-bottom">
+                        <strong class="room-price">${{ similar_room.price }}</strong>
+                        <a class="btn btn-secondary" href="{% url 'room_detail' similar_room.id %}">View Details</a>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

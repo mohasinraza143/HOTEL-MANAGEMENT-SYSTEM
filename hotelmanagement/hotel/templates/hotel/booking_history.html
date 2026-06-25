@@ -1,0 +1,61 @@
+{% extends 'hotel/base.html' %}
+
+{% block title %}Aurora Haven | Booking History{% endblock %}
+
+{% block content %}
+<section class="container booking-history-page section-space-small">
+    <div class="booking-page-header">
+        <span class="section-tag">Booking Manager</span>
+        <h1>Track and update your reservations.</h1>
+        <p>All bookings saved under your account appear here with status update controls.</p>
+    </div>
+
+    {% if bookings %}
+        <div class="booking-history-grid">
+            {% for booking in bookings %}
+                <article class="booking-history-card">
+                    <div class="booking-history-top">
+                        <div>
+                            <span class="room-category">Booking #{{ booking.id }}</span>
+                            <h3>{{ booking.room.category.name }}</h3>
+                            <p class="room-number-label">Room {{ booking.room.room_number }}</p>
+                        </div>
+                        <span class="availability-badge available">{{ booking.status }}</span>
+                    </div>
+
+                    <div class="booking-history-meta">
+                        <div>
+                            <span>Guest</span>
+                            <strong>{{ booking.guest.name }}</strong>
+                        </div>
+                        <div>
+                            <span>Dates</span>
+                            <strong>{{ booking.check_in }} to {{ booking.check_out }}</strong>
+                        </div>
+                        <div>
+                            <span>Total</span>
+                            <strong>${{ booking.total_price }}</strong>
+                        </div>
+                    </div>
+
+                    <form method="post" action="{% url 'update_booking_status' booking.id %}" class="status-form booking-status-form">
+                        {% csrf_token %}
+                        <select name="status">
+                            {% for status_value, status_label in status_choices %}
+                                <option value="{{ status_value }}" {% if booking.status == status_value %}selected{% endif %}>{{ status_label }}</option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-secondary btn-small" type="submit">Update Status</button>
+                    </form>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No bookings yet.</h3>
+            <p>Create your first booking to see it appear here with editable reservation status.</p>
+            <a class="btn btn-primary" href="{% url 'booking' %}">Create Booking</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

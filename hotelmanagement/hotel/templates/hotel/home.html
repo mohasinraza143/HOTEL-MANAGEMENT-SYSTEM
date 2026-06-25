@@ -1,0 +1,149 @@
+{% extends 'hotel/base.html' %}
+
+{% block title %}Aurora Haven | Home{% endblock %}
+
+{% block content %}
+<section class="container home-hero">
+    <div class="hero-banner">
+        
+        <div class="hero-copy">
+            <span class="hero-kicker">Hotel Booking Made Easy</span>
+            <h1>Find premium rooms, compare options, and book in minutes.</h1>
+            <p>
+                A clean hotel booking experience inspired by modern travel apps. Search room types,
+                compare availability, and manage reservations from one simple interface.
+            </p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="{% url 'rooms' %}">View Rooms</a>
+                <a class="btn btn-secondary" href="{% url 'booking' %}">Start Booking</a>
+            </div>
+        </div>
+
+        <div class="hero-side-card">
+            <div class="hero-side-chip">Popular this week</div>
+            <h3>Deluxe and Suite stays</h3>
+            <p>Comfort-first rooms with flexible booking flow and real-time availability.</p>
+            <div class="hero-mini-stats">
+                <div>
+                    <strong>{{ available_count }}</strong>
+                    <span>Available</span>
+                </div>
+                <div>
+                    <strong>${{ featured_rooms.0.price|default:'129.00' }}</strong>
+                    <span>Starting from</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form class="search-dock" action="{% url 'rooms' %}" method="get">
+        <div class="search-dock-grid">
+            <div class="form-group search-large">
+                <label for="search">Search rooms or room type</label>
+                <input id="search" type="text" name="search" placeholder="Deluxe Room, Suite, SR-101">
+            </div>
+            <div class="form-group">
+                <label for="category">Room type</label>
+                <select id="category" name="category">
+                    <option value="">All room types</option>
+                    {% for card in category_cards %}
+                        {% if card.id %}
+                            <option value="{{ card.id }}">{{ card.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="availability">Availability</label>
+                <select id="availability" name="availability">
+                    <option value="">Any</option>
+                    <option value="available">Available</option>
+                    <option value="unavailable">Unavailable</option>
+                </select>
+            </div>
+            <div class="search-submit-wrap">
+                <button class="btn btn-primary btn-block" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="quick-stats-row">
+        <article>
+            <strong>{{ room_count }}</strong>
+            <span>Total Rooms</span>
+        </article>
+        <article>
+            <strong>{{ available_count }}</strong>
+            <span>Available Now</span>
+        </article>
+        <article>
+            <strong>{{ booking_count }}</strong>
+            <span>Total Bookings</span>
+        </article>
+    </div>
+</section>
+
+<section class="container section-space categories-section">
+    <div class="section-heading">
+        <div>
+            <span class="section-tag">Room Categories</span>
+            <h2>Choose your room class</h2>
+        </div>
+        <a class="text-link" href="{% url 'rooms' %}">Explore all rooms</a>
+    </div>
+
+    <div class="category-grid">
+        {% for card in category_cards %}
+            <a class="category-card" href="{% url 'rooms' %}?category={{ card.id }}" style="--accent: {{ card.accent }};">
+                <span class="category-icon"></span>
+                <h3>{{ card.name }}</h3>
+                <p>{{ card.tagline }}</p>
+                <div class="category-footer">
+                    <span class="category-count">{{ card.room_count }} rooms</span>
+                    <span class="text-link">See rooms</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="container section-space featured-section">
+    <div class="section-heading">
+        <div>
+            <span class="section-tag">Featured Rooms</span>
+            <h2>Recommended stays for guests</h2>
+        </div>
+    </div>
+
+    <div class="featured-room-grid">
+        {% for room in featured_rooms %}
+            <article class="room-card compact-room-card">
+                <div class="room-thumb-wrap">
+                    <img src="/static/images/room1.webp" alt="Room {{ room.room_number }}">
+                </div>
+                <div class="room-card-body">
+                    <div class="room-card-topline">
+                        <span class="room-category">{{ room.category.name }}</span>
+                        <span class="availability-badge available">Available</span>
+                    </div>
+                    <h3>{{ room.category.name }}</h3>
+                    <p class="room-number-label">Room {{ room.room_number }}</p>
+                    <p>{{ room.description|truncatechars:95 }}</p>
+                    <div class="room-feature-strip">
+                        <span>Free Wi-Fi</span>
+                        <span>Breakfast</span>
+                        <span>Flexible Check-in</span>
+                    </div>
+                    <div class="room-card-bottom">
+                        <div>
+                            <small>Price per night</small>
+                            <strong class="room-price">${{ room.price }}</strong>
+                        </div>
+                        <a class="btn btn-secondary" href="{% url 'room_detail' room.id %}">View Details</a>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

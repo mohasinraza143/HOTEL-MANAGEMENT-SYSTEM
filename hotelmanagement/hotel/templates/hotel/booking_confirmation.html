@@ -1,0 +1,64 @@
+{% extends 'hotel/base.html' %}
+
+{% block title %}Aurora Haven | Booking Confirmation{% endblock %}
+
+{% block content %}
+<section class="container confirmation-page section-space-small">
+    <div class="ticket-card">
+        <div class="ticket-header">
+            <div>
+                <span class="section-tag">Reservation Confirmed</span>
+                <h1>Your stay has been secured.</h1>
+                <p class="muted-copy">This booking is saved to your account and available in your booking history.</p>
+            </div>
+            <span class="status-pill reserved">{{ booking.status }}</span>
+        </div>
+
+        <div class="ticket-grid">
+            <div>
+                <span>Booking ID</span>
+                <strong>#{{ booking.id }}</strong>
+            </div>
+            <div>
+                <span>Primary guest</span>
+                <strong>{{ booking.guest.name }}</strong>
+            </div>
+            <div>
+                <span>Room class</span>
+                <strong>{{ booking.room.category.name }}</strong>
+            </div>
+            <div>
+                <span>Room number</span>
+                <strong>{{ booking.room.room_number }}</strong>
+            </div>
+            <div>
+                <span>Check-in</span>
+                <strong>{{ booking.check_in }}</strong>
+            </div>
+            <div>
+                <span>Check-out</span>
+                <strong>{{ booking.check_out }}</strong>
+            </div>
+            <div>
+                <span>Total amount</span>
+                <strong>${{ booking.total_price }}</strong>
+            </div>
+            <div>
+                <span>Status</span>
+                <strong>{{ booking.status }}</strong>
+            </div>
+        </div>
+
+        <div class="detail-feature-list summary-feature-list">
+            <span>Reservation recorded</span>
+            <span>Booking history available</span>
+            <span>Status can be updated later</span>
+        </div>
+
+        <div class="card-actions">
+            <a class="btn btn-primary" href="{% url 'booking_history' %}">Manage Bookings</a>
+            <a class="btn btn-secondary" href="{% url 'rooms' %}">Book Another Room</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

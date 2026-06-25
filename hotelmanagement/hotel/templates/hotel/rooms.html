@@ -1,0 +1,95 @@
+{% extends 'hotel/base.html' %}
+
+{% block title %}Aurora Haven | Rooms{% endblock %}
+
+{% block content %}
+<section class="container listing-hero section-space-small">
+    <div class="listing-hero-copy">
+        <span class="section-tag">Room Listing</span>
+        <h1>Compare hotel rooms and book the stay that fits best.</h1>
+        <p>Filter by room type, search by room number, and view clean room cards like a modern hotel booking app.</p>
+    </div>
+    <div class="listing-summary-card">
+        <span>Results found</span>
+        <strong>{{ rooms|length }}</strong>
+        <p>Updated instantly from your filters.</p>
+    </div>
+</section>
+
+<section class="container section-space-small">
+    <form class="filter-panel" method="get">
+        <div class="form-group">
+            <label for="search">Search rooms</label>
+            <input id="search" type="text" name="search" value="{{ search_text }}" placeholder="Deluxe, Suite, Presidential">
+        </div>
+        <div class="form-group">
+            <label for="category">Room type</label>
+            <select id="category" name="category">
+                <option value="">All room types</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:'s' %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="availability">Stay status</label>
+            <select id="availability" name="availability">
+                <option value="" {% if not availability_filter %}selected{% endif %}>Any</option>
+                <option value="available" {% if availability_filter == 'available' %}selected{% endif %}>Available</option>
+                <option value="unavailable" {% if availability_filter == 'unavailable' %}selected{% endif %}>Unavailable</option>
+            </select>
+        </div>
+        <div class="filter-actions">
+            <button class="btn btn-primary" type="submit">Apply Filters</button>
+            <a class="btn btn-secondary" href="{% url 'rooms' %}">Reset</a>
+        </div>
+    </form>
+</section>
+
+<section class="container section-space-small">
+    <div class="listing-stack">
+        {% for room in rooms %}
+            <article class="listing-card">
+                <div class="listing-card-media">
+                    <img src="/static/images/room1.webp" alt="Room {{ room.room_number }}">
+                </div>
+                <div class="listing-card-content">
+                    <div class="listing-head">
+                        <div>
+                            <p class="room-category">{{ room.category.name }}</p>
+                            <h3>{{ room.category.name }}</h3>
+                            <p class="room-number-label">Room {{ room.room_number }}</p>
+                        </div>
+                        <span class="availability-badge {% if room.availability %}available{% else %}unavailable{% endif %}">
+                            {% if room.availability %}Available tonight{% else %}Sold out{% endif %}
+                        </span>
+                    </div>
+                    <p class="listing-description">{{ room.description|truncatechars:150 }}</p>
+                    <div class="room-feature-strip">
+                        <span>Free cancellation demo</span>
+                        <span>Breakfast included</span>
+                        <span>Air-conditioned room</span>
+                    </div>
+                </div>
+                <div class="listing-card-side">
+                    <div class="listing-price-box">
+                        <small>Per night</small>
+                        <strong>${{ room.price }}</strong>
+                        <span>Taxes and fees excluded</span>
+                    </div>
+                    <div class="listing-actions">
+                        <a class="btn btn-secondary" href="{% url 'room_detail' room.id %}">View Details</a>
+                        <a class="btn btn-primary" href="{% url 'book_room' room.id %}">Book Now</a>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <div class="empty-state">
+                <h3>No rooms matched your filters.</h3>
+                <p>Try clearing one or more filters to see the full room collection again.</p>
+                <a class="btn btn-primary" href="{% url 'rooms' %}">Show All Rooms</a>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
