@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Aurora Haven | Luxury Hotel & AI Concierge{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20261003-2">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="top-strip">
+        <div class="container top-strip-inner">
+            <span>✨ Aurora Haven Luxury Hotel & Resort</span>
+            <span>24/7 AI Concierge Assistant &bull; Smart Room Matching &bull; Seamless Online Booking</span>
+        </div>
+    </div>
+
+    <header class="site-header">
+        <nav class="navbar container">
+            <a class="brand" href="{% url 'home' %}">
+                <span class="brand-mark">AH</span>
+                <span>
+                    <strong>Aurora Haven</strong>
+                    <small>Luxury Hotel & Suites</small>
+                </span>
+            </a>
+
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation" onclick="document.body.classList.toggle('menu-open')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'rooms' %}">Rooms & Suites</a>
+                <a href="{% url 'booking' %}">Reserve Stay</a>
+                <a href="{% url 'booking_history' %}">My Bookings</a>
+                {% if request.user.is_authenticated %}
+                    {% if request.user.is_staff or request.user.is_superuser %}
+                        <a href="{% url 'admin_dashboard' %}" class="nav-admin-badge">
+                            <span>⚙️</span> Staff Portal
+                        </a>
+                    {% endif %}
+                    <span class="nav-user">Hi, {{ request.user.first_name|default:request.user.username }}</span>
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                    <a class="nav-highlight" href="{% url 'register' %}">Register</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% if messages %}
+            <section class="container messages-wrap">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </section>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Floating Aurora AI Concierge Launcher -->
+    <button id="aiLauncherBtn" class="ai-launcher-btn" type="button" aria-label="Open AI Concierge">
+        <span class="ai-pulse-dot"></span>
+        <span>✨ Ask Aurora AI</span>
+    </button>
+
+    <!-- Floating Aurora AI Chat Drawer -->
+    <div id="aiChatDrawer" class="ai-chat-drawer">
+        <div class="ai-chat-header">
+            <div class="ai-header-info">
+                <div class="ai-header-avatar">✨</div>
+                <div class="ai-header-text">
+                    <strong>Aurora AI Concierge</strong>
+                    <small>● Online &bull; 24/7 Hotel Assistant</small>
+                </div>
+            </div>
+            <button id="aiCloseBtn" class="ai-close-btn" type="button" aria-label="Close Chat">&times;</button>
+        </div>
+
+        <div id="aiChatMessages" class="ai-chat-messages">
+            <div class="ai-msg bot">
+                👋 Hello{% if request.user.is_authenticated %} <strong>{{ request.user.first_name|default:request.user.username }}</strong>{% endif %}! 
+                I'm your personal AI Concierge at <strong>Aurora Haven</strong>. 
+                Ask me anything about room recommendations, pricing, check-in timings, or hotel amenities!
+            </div>
+        </div>
+
+        <!-- Quick suggestion chips -->
+        <div class="ai-chips-wrap">
+            <button class="ai-chip" type="button" data-prompt="Show available rooms under $200">💰 Rooms under $200</button>
+            <button class="ai-chip" type="button" data-prompt="Recommend a luxury romantic suite">👑 Luxury Suites</button>
+            <button class="ai-chip" type="button" data-prompt="What are the check-in and check-out times?">🕒 Check-in timings</button>
+            <button class="ai-chip" type="button" data-prompt="What amenities does the hotel offer?">🏊 Hotel Amenities</button>
+        </div>
+
+        <!-- Chat input bar -->
+        <form id="aiChatForm" class="ai-chat-input-bar">
+            {% csrf_token %}
+            <input type="text" id="aiChatInput" class="ai-chat-input" placeholder="Type a question for AI..." autocomplete="off">
+            <button type="submit" class="ai-send-btn">Send</button>
+        </form>
+    </div>
+
+    <footer class="site-footer container">
+        <div class="footer-brand-block">
+            <span class="footer-label">Aurora Haven</span>
+            <h3>Luxury accommodation powered by intelligent AI hospitality.</h3>
+            <p>Explore handcrafted room suites, real-time availability, smart AI recommendations, and 24/7 concierge assistance.</p>
+        </div>
+        <div class="footer-links-block">
+            <div class="footer-links">
+                <a href="{% url 'rooms' %}">Explore Rooms</a>
+                <a href="{% url 'booking' %}">Make a Booking</a>
+                <a href="{% url 'booking_history' %}">My Reservations</a>
+                {% if request.user.is_staff or request.user.is_superuser %}
+                    <a href="{% url 'admin_dashboard' %}">Staff Admin Portal</a>
+                {% endif %}
+            </div>
+            <small>&copy; 2026 Aurora Haven Hotel & Resort. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <!-- AI Concierge Client Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const launcher = document.getElementById('aiLauncherBtn');
+            const drawer = document.getElementById('aiChatDrawer');
+            const closeBtn = document.getElementById('aiCloseBtn');
+            const form = document.getElementById('aiChatForm');
+            const input = document.getElementById('aiChatInput');
+            const messagesContainer = document.getElementById('aiChatMessages');
+            const chips = document.querySelectorAll('.ai-chip');
+
+            if (launcher && drawer) {
+                launcher.addEventListener('click', function() {
+                    drawer.classList.toggle('open');
+                    if (drawer.classList.contains('open')) {
+                        input.focus();
+                    }
+                });
+
+                closeBtn.addEventListener('click', function() {
+                    drawer.classList.remove('open');
+                });
+
+                chips.forEach(chip => {
+                    chip.addEventListener('click', function() {
+                        const prompt = this.getAttribute('data-prompt');
+                        sendMessage(prompt);
+                    });
+                });
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const text = input.value.trim();
+                    if (!text) return;
+                    sendMessage(text);
+                    input.value = '';
+                });
+
+                function appendMessage(text, sender) {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = 'ai-msg ' + sender;
+                    // Format markdown-like bold text & bullet points
+                    let formatted = text
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\n/g, '<br>');
+                    msgDiv.innerHTML = formatted;
+                    messagesContainer.appendChild(msgDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    return msgDiv;
+                }
+
+                function appendRoomCards(rooms) {
+                    if (!rooms || rooms.length === 0) return;
+                    const wrap = document.createElement('div');
+                    wrap.style.display = 'flex';
+                    wrap.style.flexDirection = 'column';
+                    wrap.style.gap = '8px';
+                    wrap.style.width = '100%';
+
+                    rooms.forEach(room => {
+                        const card = document.createElement('div');
+                        card.className = 'ai-room-card';
+                        card.innerHTML = `
+                            <div class="ai-room-thumb">
+                                <img src="${room.image}" alt="${room.room_number}">
+                            </div>
+                            <div class="ai-room-info">
+                                <strong>Room ${room.room_number} &bull; ${room.category}</strong>
+                                <span>$${room.price}/night</span>
+                            </div>
+                            <a href="/booking/${room.id}/" class="ai-room-book-btn">Book &rarr;</a>
+                        `;
+                        wrap.appendChild(card);
+                    });
+                    messagesContainer.appendChild(wrap);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+
+                function sendMessage(text) {
+                    appendMessage(text, 'user');
+
+                    // Typing indicator
+                    const typingDiv = appendMessage('<em>Aurora AI is thinking...</em>', 'bot');
+
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+
+                    fetch('/api/ai/chat/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({ message: text })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        typingDiv.remove();
+                        if (data.reply) {
+                            appendMessage(data.reply, 'bot');
+                            if (data.suggested_rooms && data.suggested_rooms.length > 0) {
+                                appendRoomCards(data.suggested_rooms);
+                            }
+                        } else {
+                            appendMessage("Sorry, I could not process that question. Please try asking again.", 'bot');
+                        }
+                    })
+                    .catch(err => {
+                        typingDiv.remove();
+                        appendMessage("Aurora Haven rooms start from $129/night. Feel free to browse our Rooms section!", 'bot');
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

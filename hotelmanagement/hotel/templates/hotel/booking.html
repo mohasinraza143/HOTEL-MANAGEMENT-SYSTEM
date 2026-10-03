@@ -1,0 +1,122 @@
+{% extends 'hotel/base.html' %}
+
+{% block title %}Aurora Haven | Book Room{% endblock %}
+
+{% block content %}
+<section class="container booking-page section-space-small">
+    <div class="booking-page-header">
+        <span class="section-tag">Booking Form</span>
+        <h1>Complete your reservation details.</h1>
+        <p>Enter guest information, choose dates, and confirm the room in a clean booking flow.</p>
+    </div>
+
+    <div class="booking-layout">
+        <div class="booking-form-card">
+            <div class="section-heading left-align">
+                <div>
+                    <h2>Guest details</h2>
+                </div>
+            </div>
+
+            <form method="post" id="booking-form">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="guest_name">Guest name</label>
+                        <input id="guest_name" type="text" name="guest_name" value="{{ form_data.guest_name }}" placeholder="Enter guest full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone number</label>
+                        <input id="phone" type="text" name="phone" value="{{ form_data.phone }}" placeholder="Enter contact number">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="room">Select room type</label>
+                    <select id="room" name="room">
+                        <option value="">Choose a room</option>
+                        {% for room in rooms %}
+                            <option value="{{ room.id }}" data-price="{{ room.price }}" {% if form_data.room == room.id|stringformat:'s' %}selected{% endif %}>
+                                {{ room.room_number }} - {{ room.category.name }} - ${{ room.price }}/night
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="check_in">Check-in date</label>
+                        <input id="check_in" type="date" name="check_in" value="{{ form_data.check_in }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="check_out">Check-out date</label>
+                        <input id="check_out" type="date" name="check_out" value="{{ form_data.check_out }}">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-block" type="submit">Confirm Reservation</button>
+            </form>
+        </div>
+
+        <aside class="booking-summary-card">
+            <span class="section-tag">Stay Summary</span>
+            <h2>Your selected stay</h2>
+
+            {% if selected_room %}
+                <img class="summary-image" src="/static/images/room1.webp" alt="Room {{ selected_room.room_number }}">
+                <div class="summary-line"><span>Room</span><strong>{{ selected_room.room_number }}</strong></div>
+                <div class="summary-line"><span>Category</span><strong>{{ selected_room.category.name }}</strong></div>
+                <div class="summary-line"><span>Price</span><strong>${{ selected_room.price }}/night</strong></div>
+            {% else %}
+                <p class="muted-copy">Select a room to preview your stay details here.</p>
+            {% endif %}
+
+            <div class="estimate-box">
+                <div class="summary-line"><span>Nights</span><strong id="night-count">0</strong></div>
+                <div class="summary-line total"><span>Estimated total</span><strong id="total-price">$0.00</strong></div>
+            </div>
+
+            <div class="summary-points">
+                <span>Instant price estimate</span>
+                <span>Simple booking flow</span>
+                <span>Reservation status tracking</span>
+            </div>
+
+            <p class="muted-copy">The final total is calculated automatically using room price multiplied by the number of nights.</p>
+        </aside>
+    </div>
+</section>
+
+<script>
+    const roomSelect = document.getElementById('room');
+    const checkInInput = document.getElementById('check_in');
+    const checkOutInput = document.getElementById('check_out');
+    const nightCount = document.getElementById('night-count');
+    const totalPrice = document.getElementById('total-price');
+
+    function updateEstimate() {
+        const selectedOption = roomSelect.options[roomSelect.selectedIndex];
+        const roomPrice = Number(selectedOption ? selectedOption.dataset.price : 0);
+        const checkInDate = new Date(checkInInput.value);
+        const checkOutDate = new Date(checkOutInput.value);
+
+        if (!roomPrice || Number.isNaN(checkInDate.getTime()) || Number.isNaN(checkOutDate.getTime())) {
+            nightCount.textContent = '0';
+            totalPrice.textContent = '$0.00';
+            return;
+        }
+
+        const difference = checkOutDate.getTime() - checkInDate.getTime();
+        const nights = Math.max(Math.round(difference / (1000 * 60 * 60 * 24)), 0);
+        const total = roomPrice * nights;
+
+        nightCount.textContent = String(nights);
+        totalPrice.textContent = `$${total.toFixed(2)}`;
+    }
+
+    roomSelect.addEventListener('change', updateEstimate);
+    checkInInput.addEventListener('input', updateEstimate);
+    checkOutInput.addEventListener('input', updateEstimate);
+    updateEstimate();
+</script>
+{% endblock %}

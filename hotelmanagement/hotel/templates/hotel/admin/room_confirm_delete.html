@@ -1,0 +1,22 @@
+{% extends 'hotel/admin/base_admin.html' %}
+
+{% block title %}Delete Room | Staff Portal{% endblock %}
+{% block page_title %}Confirm Deletion{% endblock %}
+
+{% block admin_content %}
+<div class="admin-panel" style="max-width: 500px; margin: 40px auto; text-align: center;">
+    <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+    <h3 style="color: #fff; margin-bottom: 8px;">Delete Room {{ room.room_number }}?</h3>
+    <p style="color: var(--admin-muted); font-size: 14px; margin-bottom: 24px;">
+        Are you sure you want to delete Room <strong>{{ room.room_number }}</strong> ({{ room.category.name }})? This action cannot be undone.
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div style="display: flex; justify-content: center; gap: 12px;">
+            <a href="{% url 'admin_rooms' %}" class="btn-admin btn-admin-outline">Cancel</a>
+            <button type="submit" class="btn-admin btn-admin-danger">Yes, Delete Room</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

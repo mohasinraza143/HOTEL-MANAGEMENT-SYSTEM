@@ -1,0 +1,62 @@
+{% extends 'hotel/admin/base_admin.html' %}
+
+{% block title %}Guest Directory | Staff Portal{% endblock %}
+{% block page_title %}Registered Guests & Profiles{% endblock %}
+
+{% block admin_content %}
+<div class="admin-panel" style="padding: 16px; margin-bottom: 24px;">
+    <form method="GET" action="{% url 'admin_guests' %}" style="display: flex; gap: 12px;">
+        <input type="text" name="search" class="admin-form-input" placeholder="Search by guest name, phone, or email..." value="{{ search_q }}">
+        <button type="submit" class="btn-admin btn-admin-outline">Search</button>
+        {% if search_q %}
+            <a href="{% url 'admin_guests' %}" class="btn-admin btn-admin-outline" style="color: #f87171;">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="admin-panel">
+    <div style="overflow-x: auto;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Guest Name</th>
+                    <th>Contact Phone</th>
+                    <th>Account / Email</th>
+                    <th>Total Bookings</th>
+                    <th>Lifetime Spend</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for g in guests %}
+                <tr>
+                    <td><strong>{{ g.name }}</strong></td>
+                    <td>{{ g.phone|default:"Not provided" }}</td>
+                    <td>
+                        {% if g.user %}
+                            <div>{{ g.user.email|default:g.user.username }}</div>
+                            <small style="color: var(--admin-muted);">@{{ g.user.username }}</small>
+                        {% else %}
+                            <small style="color: var(--admin-muted);">Guest without linked account</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="status-badge" style="background: rgba(16, 185, 129, 0.15); color: #6ee7b7;">
+                            {{ g.booking_count }} Stay{{ g.booking_count|pluralize }}
+                        </span>
+                    </td>
+                    <td>
+                        <strong style="color: #34d399;">${{ g.total_spent|default:"0.00" }}</strong>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--admin-muted); padding: 40px;">
+                        No guests registered in directory yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

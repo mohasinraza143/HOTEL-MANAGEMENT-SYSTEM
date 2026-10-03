@@ -1,0 +1,110 @@
+{% extends 'hotel/admin/base_admin.html' %}
+
+{% block title %}Manage Rooms | Staff Portal{% endblock %}
+{% block page_title %}Room Inventory & Control{% endblock %}
+
+{% block admin_content %}
+<div class="panel-header" style="border: none; padding-bottom: 0;">
+    <div>
+        <p style="margin: 0; color: var(--admin-muted); font-size: 14px;">Manage room units, toggle instant availability, or configure categories.</p>
+    </div>
+    <div>
+        <a href="{% url 'admin_room_create' %}" class="btn-admin btn-admin-primary">➕ Add New Room</a>
+    </div>
+</div>
+
+<!-- Filters Bar -->
+<div class="admin-panel" style="padding: 16px; margin-top: 16px; margin-bottom: 24px;">
+    <form method="GET" action="{% url 'admin_rooms' %}" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+        <div style="flex: 2; min-width: 200px;">
+            <input type="text" name="search" class="admin-form-input" placeholder="Search room number or category..." value="{{ search_q }}">
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+            <select name="category" class="admin-form-select">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="flex: 1; min-width: 140px;">
+            <select name="availability" class="admin-form-select">
+                <option value="">All Statuses</option>
+                <option value="available" {% if selected_availability == 'available' %}selected{% endif %}>Available Only</option>
+                <option value="unavailable" {% if selected_availability == 'unavailable' %}selected{% endif %}>Occupied / Inactive</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="btn-admin btn-admin-outline">Filter</button>
+            {% if search_q or selected_category or selected_availability %}
+                <a href="{% url 'admin_rooms' %}" class="btn-admin btn-admin-outline" style="color: #f87171;">Reset</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+<!-- Rooms Table -->
+<div class="admin-panel">
+    <div style="overflow-x: auto;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Room Unit</th>
+                    <th>Category</th>
+                    <th>Price / Night</th>
+                    <th>Status</th>
+                    <th>Availability Action</th>
+                    <th style="text-align: right;">Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for room in rooms %}
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 54px; height: 38px; border-radius: 8px; overflow: hidden; background: #1e293b; flex-shrink: 0;">
+                                <img src="{{ room.image }}" alt="{{ room.room_number }}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=150&q=80'">
+                            </div>
+                            <div>
+                                <strong>Room {{ room.room_number }}</strong>
+                                <div style="font-size: 11px; color: var(--admin-muted); max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    {{ room.description }}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge" style="background: rgba(255,255,255,0.06); color: #e2e8f0;">
+                            {{ room.category.name }}
+                        </span>
+                    </td>
+                    <td><strong style="color: #34d399; font-size: 15px;">${{ room.price }}</strong></td>
+                    <td>
+                        {% if room.availability %}
+                            <span class="status-badge badge-available">● Available</span>
+                        {% else %}
+                            <span class="status-badge badge-occupied">○ Occupied / Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'admin_room_toggle' room.id %}" class="btn-admin btn-admin-outline" style="font-size: 12px; padding: 4px 10px;">
+                            {% if room.availability %}Mark Unavailable{% else %}Mark Available{% endif %}
+                        </a>
+                    </td>
+                    <td style="text-align: right;">
+                        <a href="{% url 'admin_room_edit' room.id %}" class="btn-admin btn-admin-outline" style="font-size: 12px; padding: 4px 8px;">✏️ Edit</a>
+                        <a href="{% url 'admin_room_delete' room.id %}" class="btn-admin btn-admin-danger" style="font-size: 12px; padding: 4px 8px;">🗑️ Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: var(--admin-muted); padding: 40px;">
+                        No rooms match the selected criteria.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

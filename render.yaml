@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: aurorahaven-hotel
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "cd hotelmanagement && gunicorn hotelmanagement.wsgi:application"
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_PASSWORD
+        value: admin123
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: admin@aurorahaven.com

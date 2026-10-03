@@ -1,0 +1,124 @@
+{% extends 'hotel/admin/base_admin.html' %}
+
+{% block title %}AI Intelligence & Analytics | Staff Portal{% endblock %}
+{% block page_title %}Aurora AI Hotel Intelligence{% endblock %}
+
+{% block admin_content %}
+<!-- AI Header Banner -->
+<div style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.25)); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 16px; padding: 28px; margin-bottom: 30px;">
+    <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+        <div style="width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, #7c3aed, #3b82f6); display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);">
+            ✨
+        </div>
+        <div style="flex: 1; min-width: 280px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <h2 style="margin: 0; font-size: 22px; color: #fff;">Real-Time AI Hotel Analytics & Yield Management</h2>
+                <span class="status-badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">Live Engine Active</span>
+            </div>
+            <p style="margin: 0; color: #cbd5e1; font-size: 14px; line-height: 1.6;">
+                Aurora AI continuously monitors room availability, booking velocity, and revenue yield to calculate dynamic pricing recommendations and occupancy forecasts.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Dynamic Pricing Recommendation -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 30px;">
+    <div class="admin-panel" style="margin-bottom: 0;">
+        <div class="panel-header">
+            <h3>Dynamic Pricing Recommendation</h3>
+            <span class="status-badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4);">
+                {{ ai_insights.pricing_action }}
+            </span>
+        </div>
+        <div style="margin-bottom: 16px;">
+            <div style="font-size: 13px; color: var(--admin-muted); margin-bottom: 4px;">Market Demand Status</div>
+            <div style="font-size: 20px; font-weight: 700; color: #fff;">{{ ai_insights.pricing_status }}</div>
+        </div>
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--admin-border); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+            <p style="margin: 0; font-size: 14px; color: #e2e8f0; line-height: 1.6;">
+                {{ ai_insights.pricing_advice }}
+            </p>
+        </div>
+        <div style="display: flex; gap: 16px; font-size: 13px; color: var(--admin-muted);">
+            <div>Current Occupancy: <strong style="color: #fff;">{{ ai_insights.occupancy_rate }}%</strong></div>
+            <div>Booked Units: <strong style="color: #fff;">{{ ai_insights.booked_rooms }}/{{ ai_insights.available_rooms|add:ai_insights.booked_rooms }}</strong></div>
+        </div>
+    </div>
+
+    <!-- Demand & Trends Forecast -->
+    <div class="admin-panel" style="margin-bottom: 0;">
+        <div class="panel-header">
+            <h3>AI Demand Forecast & Highlights</h3>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px solid var(--admin-border);">
+                <div>
+                    <strong style="color: #fff;">Most In-Demand Category</strong>
+                    <div style="font-size: 12px; color: var(--admin-muted);">Highest booking frequency</div>
+                </div>
+                <span class="status-badge" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd;">{{ ai_insights.popular_category }}</span>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px solid var(--admin-border);">
+                <div>
+                    <strong style="color: #fff;">24/7 AI Concierge Status</strong>
+                    <div style="font-size: 12px; color: var(--admin-muted);">Guest interactive chatbot</div>
+                </div>
+                <span class="status-badge badge-checked-in">Operational (Active)</span>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px solid var(--admin-border);">
+                <div>
+                    <strong style="color: #fff;">Smart Room Matcher</strong>
+                    <div style="font-size: 12px; color: var(--admin-muted);">Guest preference scoring</div>
+                </div>
+                <span class="status-badge badge-checked-in">Live on Booking Portal</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Room Revenue Performance -->
+<div class="admin-panel">
+    <div class="panel-header">
+        <h3>Room Revenue & Booking Frequency</h3>
+    </div>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Room</th>
+                <th>Category</th>
+                <th>Base Rate</th>
+                <th>Confirmed Bookings</th>
+                <th>Generated Revenue</th>
+                <th>Live Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in room_performance %}
+            <tr>
+                <td><strong>Room {{ r.room_number }}</strong></td>
+                <td>{{ r.category.name }}</td>
+                <td>${{ r.price }}/night</td>
+                <td>{{ r.booking_count|default:"0" }} Stays</td>
+                <td><strong style="color: #34d399;">${{ r.revenue|default:"0.00" }}</strong></td>
+                <td>
+                    {% if r.availability %}
+                        <span class="status-badge badge-available">Available</span>
+                    {% else %}
+                        <span class="status-badge badge-occupied">Occupied</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center; color: var(--admin-muted); padding: 30px;">
+                    No room data recorded yet.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'hotel/admin/base_admin.html' %}
+
+{% block title %}Manage Categories | Staff Portal{% endblock %}
+{% block page_title %}Room Categories{% endblock %}
+
+{% block admin_content %}
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 24px; align-items: start;">
+    <!-- Add Category Form -->
+    <div class="admin-panel">
+        <div class="panel-header">
+            <h3>Add Category</h3>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--admin-muted); margin-bottom: 6px;">Category Name *</label>
+                <input type="text" name="name" class="admin-form-input" placeholder="e.g. Ocean Suite, Penthouse" required>
+            </div>
+            <button type="submit" class="btn-admin btn-admin-primary" style="width: 100%; justify-content: center;">
+                ➕ Create Category
+            </button>
+        </form>
+    </div>
+
+    <!-- Categories List -->
+    <div class="admin-panel">
+        <div class="panel-header">
+            <h3>Active Room Categories</h3>
+        </div>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Category Name</th>
+                    <th>Assigned Rooms</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cat in categories %}
+                <tr>
+                    <td><strong>{{ cat.name }}</strong></td>
+                    <td>
+                        <span class="status-badge" style="background: rgba(59, 130, 246, 0.15); color: #93c5fd;">
+                            {{ cat.room_count }} Room{{ cat.room_count|pluralize }}
+                        </span>
+                    </td>
+                    <td style="text-align: right;">
+                        <form method="POST" action="{% url 'admin_category_delete' cat.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete category \'{{ cat.name }}\'?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-admin btn-admin-danger" style="font-size: 12px; padding: 4px 10px;">🗑️ Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; color: var(--admin-muted); padding: 30px;">
+                        No categories defined.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

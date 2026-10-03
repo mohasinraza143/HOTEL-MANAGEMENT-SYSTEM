@@ -1,0 +1,71 @@
+{% extends 'hotel/base.html' %}
+
+{% block title %}Aurora Haven | My Bookings{% endblock %}
+
+{% block content %}
+<section class="container booking-history-page section-space-small">
+    <div class="booking-page-header">
+        <span class="section-tag">Guest Dashboard</span>
+        <h1>My Reservations & Stay History</h1>
+        <p>Manage your upcoming reservations, check details, or request cancellations easily.</p>
+    </div>
+
+    {% if bookings %}
+        <div class="booking-history-grid">
+            {% for booking in bookings %}
+                <article class="booking-history-card">
+                    <div class="booking-history-top">
+                        <div>
+                            <span class="room-category">Reservation #{{ booking.id }}</span>
+                            <h3>{{ booking.room.category.name }}</h3>
+                            <p class="room-number-label">Room {{ booking.room.room_number }}</p>
+                        </div>
+                        <span class="status-badge 
+                            {% if booking.status == 'Reserved' %}badge-reserved
+                            {% elif booking.status == 'Checked-in' %}badge-checked-in
+                            {% elif booking.status == 'Checked-out' %}badge-checked-out
+                            {% else %}badge-cancelled{% endif %}">
+                            {{ booking.status }}
+                        </span>
+                    </div>
+
+                    <div class="booking-history-meta">
+                        <div>
+                            <span>Guest Name</span>
+                            <strong>{{ booking.guest.name }}</strong>
+                        </div>
+                        <div>
+                            <span>Stay Dates</span>
+                            <strong>{{ booking.check_in|date:"M d, Y" }} &rarr; {{ booking.check_out|date:"M d, Y" }}</strong>
+                        </div>
+                        <div>
+                            <span>Total Amount</span>
+                            <strong style="color: #10b981;">${{ booking.total_price }}</strong>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; pt-3; border-top: 1px solid var(--border); padding-top: 14px;">
+                        <div>
+                            <small style="color: var(--muted);">Booked on {{ booking.created_at|date:"M d, Y" }}</small>
+                        </div>
+                        {% if booking.status == 'Reserved' %}
+                            <form method="post" action="{% url 'cancel_booking' booking.id %}" onsubmit="return confirm('Are you sure you want to cancel booking #{{ booking.id }}?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-secondary btn-small" style="color: #dc2626; border-color: #fee2e2; background: #fff5f5;">
+                                    Cancel Booking
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No reservations yet.</h3>
+            <p>You have not made any hotel reservations yet. Explore our rooms and book your stay today!</p>
+            <a class="btn btn-primary" href="{% url 'rooms' %}">Explore Rooms &rarr;</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

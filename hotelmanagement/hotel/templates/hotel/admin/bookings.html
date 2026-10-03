@@ -1,0 +1,103 @@
+{% extends 'hotel/admin/base_admin.html' %}
+
+{% block title %}Manage Bookings | Staff Portal{% endblock %}
+{% block page_title %}Guest Bookings & Reservations{% endblock %}
+
+{% block admin_content %}
+<div class="panel-header" style="border: none; padding-bottom: 0;">
+    <p style="margin: 0; color: var(--admin-muted); font-size: 14px;">Track all guest reservations, process check-ins, check-outs, or cancellations.</p>
+</div>
+
+<!-- Filters Bar -->
+<div class="admin-panel" style="padding: 16px; margin-top: 16px; margin-bottom: 24px;">
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+        <!-- Status Tabs -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="{% url 'admin_bookings' %}" class="btn-admin {% if not selected_status %}btn-admin-primary{% else %}btn-admin-outline{% endif %}" style="font-size: 12px; padding: 6px 12px;">All</a>
+            <a href="{% url 'admin_bookings' %}?status=Reserved" class="btn-admin {% if selected_status == 'Reserved' %}btn-admin-primary{% else %}btn-admin-outline{% endif %}" style="font-size: 12px; padding: 6px 12px;">Reserved</a>
+            <a href="{% url 'admin_bookings' %}?status=Checked-in" class="btn-admin {% if selected_status == 'Checked-in' %}btn-admin-primary{% else %}btn-admin-outline{% endif %}" style="font-size: 12px; padding: 6px 12px;">Checked-in</a>
+            <a href="{% url 'admin_bookings' %}?status=Checked-out" class="btn-admin {% if selected_status == 'Checked-out' %}btn-admin-primary{% else %}btn-admin-outline{% endif %}" style="font-size: 12px; padding: 6px 12px;">Checked-out</a>
+            <a href="{% url 'admin_bookings' %}?status=Cancelled" class="btn-admin {% if selected_status == 'Cancelled' %}btn-admin-primary{% else %}btn-admin-outline{% endif %}" style="font-size: 12px; padding: 6px 12px;">Cancelled</a>
+        </div>
+
+        <!-- Search Form -->
+        <form method="GET" action="{% url 'admin_bookings' %}" style="display: flex; gap: 8px;">
+            {% if selected_status %}
+                <input type="hidden" name="status" value="{{ selected_status }}">
+            {% endif %}
+            <input type="text" name="search" class="admin-form-input" placeholder="Search guest, phone, room..." value="{{ search_q }}" style="width: 240px; padding: 6px 12px; font-size: 13px;">
+            <button type="submit" class="btn-admin btn-admin-outline" style="padding: 6px 12px;">Search</button>
+        </form>
+    </div>
+</div>
+
+<!-- Bookings Table -->
+<div class="admin-panel">
+    <div style="overflow-x: auto;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Ref ID</th>
+                    <th>Guest Information</th>
+                    <th>Room Reserved</th>
+                    <th>Stay Dates</th>
+                    <th>Total Price</th>
+                    <th>Current Status</th>
+                    <th>Change Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in bookings %}
+                <tr>
+                    <td><strong>#{{ b.id }}</strong></td>
+                    <td>
+                        <div><strong>{{ b.guest.name }}</strong></div>
+                        <small style="color: var(--admin-muted);">📞 {{ b.guest.phone }}</small>
+                        {% if b.guest.user.email %}
+                            <small style="display: block; color: var(--admin-muted);">✉️ {{ b.guest.user.email }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div><strong>Room {{ b.room.room_number }}</strong></div>
+                        <span class="status-badge" style="background: rgba(255,255,255,0.06); font-size: 11px;">{{ b.room.category.name }}</span>
+                    </td>
+                    <td>
+                        <div><strong>{{ b.check_in|date:"M d, Y" }}</strong> &rarr;</div>
+                        <small style="color: var(--admin-muted);">{{ b.check_out|date:"M d, Y" }}</small>
+                    </td>
+                    <td>
+                        <strong style="color: #34d399; font-size: 15px;">${{ b.total_price }}</strong>
+                    </td>
+                    <td>
+                        <span class="status-badge 
+                            {% if b.status == 'Reserved' %}badge-reserved
+                            {% elif b.status == 'Checked-in' %}badge-checked-in
+                            {% elif b.status == 'Checked-out' %}badge-checked-out
+                            {% else %}badge-cancelled{% endif %}">
+                            {{ b.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <form method="POST" action="{% url 'admin_booking_status' b.id %}">
+                            {% csrf_token %}
+                            <select name="status" class="admin-form-select" style="padding: 6px 10px; font-size: 12px; width: 130px;" onchange="this.form.submit()">
+                                <option value="Reserved" {% if b.status == 'Reserved' %}selected{% endif %}>Reserved</option>
+                                <option value="Checked-in" {% if b.status == 'Checked-in' %}selected{% endif %}>Checked-in</option>
+                                <option value="Checked-out" {% if b.status == 'Checked-out' %}selected{% endif %}>Checked-out</option>
+                                <option value="Cancelled" {% if b.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                            </select>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: var(--admin-muted); padding: 40px;">
+                        No bookings found for the selected filter.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

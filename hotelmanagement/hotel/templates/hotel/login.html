@@ -1,0 +1,31 @@
+{% extends 'hotel/base.html' %}
+
+{% block title %}Aurora Haven | Login{% endblock %}
+
+{% block content %}
+<section class="container auth-page section-space-small">
+    <div class="auth-card">
+        <div class="auth-copy">
+            <span class="section-tag">Login</span>
+            <h1>Sign in to manage your bookings.</h1>
+            <p>Use your account to reserve rooms, view booking history, and track reservation status.</p>
+        </div>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" value="{{ form_data.username }}" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" placeholder="Enter password">
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Login</button>
+        </form>
+
+        <p class="auth-switch">New here? <a href="{% url 'register' %}">Create an account</a></p>
+    </div>
+</section>
+{% endblock %}
