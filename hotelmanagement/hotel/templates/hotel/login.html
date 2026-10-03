@@ -1,20 +1,16 @@
 {% extends 'hotel/base.html' %}
 
-{% block title %}{% if 'portal' in next %}Staff Portal Login | Aurora Haven{% else %}Aurora Haven | Login{% endif %}{% endblock %}
+{% block title %}Aurora Haven | Account Login{% endblock %}
 
 {% block content %}
 <section class="container auth-page section-space">
     <div class="luxury-auth-card">
         <div class="auth-header">
-            <div class="auth-icon-badge">{% if 'portal' in next %}👔{% else %}🔐{% endif %}</div>
-            <span class="luxury-kicker">{% if 'portal' in next %}Management & Staff Area{% else %}Welcome Back{% endif %}</span>
-            <h1 class="auth-title">{% if 'portal' in next %}Staff Portal Login{% else %}Sign In to Your Account{% endif %}</h1>
+            <div class="auth-icon-badge">🔐</div>
+            <span class="luxury-kicker">Welcome Back</span>
+            <h1 class="auth-title">Sign In to Your Account</h1>
             <p class="auth-subtitle">
-                {% if 'portal' in next %}
-                    Authorized personnel only. Sign in with administrative credentials to access hotel operations, inventory & AI revenue intelligence.
-                {% else %}
-                    Access your hotel reservations, track live stay status, and enjoy personalized concierge services.
-                {% endif %}
+                Access your hotel reservations, track stay status, or manage hotel operations with your authorized account.
             </p>
         </div>
 
@@ -24,48 +20,23 @@
             
             <div class="form-group" style="margin-bottom: 20px;">
                 <label for="username" style="display: block; font-size: 0.82rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Username</label>
-                <input id="username" type="text" name="username" value="{{ form_data.username }}" placeholder="Enter your username" class="luxury-input" required autofocus>
+                <input id="username" type="text" name="username" value="{{ form_data.username }}" placeholder="Enter your username" class="luxury-input" required autofocus autocomplete="username">
             </div>
 
             <div class="form-group" style="margin-bottom: 24px;">
                 <label for="password" style="display: block; font-size: 0.82rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Password</label>
-                <input id="password" type="password" name="password" placeholder="Enter your account password" class="luxury-input" required>
+                <input id="password" type="password" name="password" placeholder="Enter your password" class="luxury-input" required autocomplete="current-password">
             </div>
 
             <button class="btn-luxury-primary" type="submit" style="width: 100%; height: 50px; font-size: 1rem;">
-                {% if 'portal' in next %}Access Staff Portal &rarr;{% else %}Sign In &rarr;{% endif %}
+                Sign In &rarr;
             </button>
         </form>
 
-        <!-- Staff Access Quick-Fill Box -->
-        <div class="staff-login-hint">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                <div>
-                    <strong style="color: #93c5fd; font-size: 0.85rem; display: block;">👔 Hotel Staff / Admin?</strong>
-                    <small style="color: #94a3b8; font-size: 0.78rem;">Username: <code style="color: #fde047;">admin</code> &bull; Password: <code style="color: #fde047;">admin123</code></small>
-                </div>
-                <button type="button" class="btn-demo-quickfill" onclick="fillAdminDemo()">
-                    Fill Demo Admin
-                </button>
-            </div>
-        </div>
-
-        <div class="auth-footer-switch" style="margin-top: 20px;">
+        <div class="auth-footer-switch" style="margin-top: 24px;">
             <span>New guest at Aurora Haven?</span>
             <a href="{% url 'register' %}" class="luxury-text-link">Create an account &rarr;</a>
         </div>
     </div>
 </section>
-
-<script>
-function fillAdminDemo() {
-    const userField = document.getElementById('username');
-    const passField = document.getElementById('password');
-    if (userField && passField) {
-        userField.value = 'admin';
-        passField.value = 'admin123';
-        userField.focus();
-    }
-}
-</script>
 {% endblock %}
