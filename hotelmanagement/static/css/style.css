@@ -2329,10 +2329,10 @@ main {
     cursor: pointer;
 }
 
-/* Footer Bottom Bar with Mohasin Raza Signature */
+/* Footer Bottom Bar with Mohasin Raza Signature on Left & Social Links on Right */
 .footer-bottom-bar {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 26px 0 32px 0;
+    padding: 28px 0 34px 0;
     background: #03050a;
     position: relative;
 }
@@ -2342,38 +2342,41 @@ main {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 20px;
-    font-size: 0.88rem;
-    padding-right: 220px; /* Crucial: leaves dedicated clearance for floating AI button */
+    gap: 24px;
+    padding-right: 210px; /* Essential clearance for floating AI button */
 }
 
-.footer-copy {
-    color: #64748b;
+/* Left Metadata: Mohasin Raza Signature on TOP, Copyright BELOW IT */
+.footer-left-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
 }
 
-.footer-creator {
+.footer-creator-line {
     display: flex;
     align-items: center;
 }
 
 .creator-badge {
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(99, 102, 241, 0.14));
-    border: 1.5px solid rgba(212, 175, 55, 0.5);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(99, 102, 241, 0.16));
+    border: 1.5px solid rgba(212, 175, 55, 0.55);
     color: #e2e8f0;
-    padding: 8px 22px;
+    padding: 7px 20px;
     border-radius: 999px;
     font-size: 0.88rem;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 4px 18px rgba(212, 175, 55, 0.22);
     backdrop-filter: blur(8px);
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .creator-badge:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 26px rgba(212, 175, 55, 0.35);
+    box-shadow: 0 8px 26px rgba(212, 175, 55, 0.4);
     border-color: #ffd700;
 }
 
@@ -2381,7 +2384,69 @@ main {
     color: #ffd700;
     font-weight: 800;
     letter-spacing: 0.04em;
-    text-shadow: 0 0 12px rgba(255, 215, 0, 0.45);
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+}
+
+.footer-copy {
+    color: #64748b;
+    font-size: 0.82rem;
+}
+
+/* Discreet Staff & Admin link in Services column */
+.footer-admin-link {
+    color: #94a3b8 !important;
+    font-size: 0.85rem !important;
+    transition: color 0.2s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.footer-admin-link:hover {
+    color: #60a5fa !important;
+}
+
+/* Right Side: Serial Social Media Links with Icons */
+.footer-social-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.social-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.footer-social-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.social-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+}
+
+.social-btn:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(99, 102, 241, 0.3));
+    border-color: #ffd700;
+    color: #ffffff;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(212, 175, 55, 0.35);
 }
 
 /* ==========================================================
@@ -2473,9 +2538,20 @@ main {
     }
     .footer-bottom-inner {
         padding-right: 0 !important;
-        padding-bottom: 75px !important;
+        padding-bottom: 85px !important;
         flex-direction: column !important;
         text-align: center !important;
+        align-items: center !important;
         justify-content: center !important;
+        gap: 20px !important;
+    }
+    .footer-left-meta {
+        align-items: center !important;
+        text-align: center !important;
+    }
+    .footer-social-wrap {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 8px !important;
     }
 }
