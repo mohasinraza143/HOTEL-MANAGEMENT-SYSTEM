@@ -2140,3 +2140,322 @@ main {
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================================
+   THEME TOGGLE BUTTON
+   ========================================================== */
+
+.theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    transition: all 0.25s ease;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: scale(1.08) rotate(15deg);
+    border-color: #d4af37;
+}
+
+/* ==========================================================
+   LUXURY AUTHENTICATION CARDS (Login & Register)
+   ========================================================== */
+
+.luxury-auth-card {
+    max-width: 480px;
+    margin: 40px auto;
+    background: rgba(17, 24, 39, 0.8);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+    padding: 42px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-icon-badge {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(59, 130, 246, 0.2));
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 14px;
+}
+
+.auth-title {
+    font-size: 1.8rem;
+    color: #fff;
+    margin: 4px 0 8px 0;
+    letter-spacing: -0.02em;
+}
+
+.auth-subtitle {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.auth-footer-switch {
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.auth-footer-switch a {
+    margin-left: 6px;
+}
+
+/* ==========================================================
+   PROFESSIONAL 5-STAR LUXURY FOOTER
+   ========================================================== */
+
+.luxury-footer {
+    background: #05080f;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    margin-top: 80px;
+    position: relative;
+    z-index: 10;
+}
+
+.luxury-footer-inner {
+    display: grid;
+    grid-template-columns: 1.8fr 1.1fr 1.1fr 1.4fr;
+    gap: 40px;
+    padding: 60px 0 40px 0;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.footer-desc {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: #94a3b8;
+    margin: 0 0 20px 0;
+}
+
+.footer-contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+}
+
+.footer-title {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 18px 0;
+}
+
+.footer-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-nav a {
+    color: #94a3b8;
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.footer-nav a:hover {
+    color: #d4af37;
+    padding-left: 4px;
+}
+
+.footer-subscribe-box {
+    display: flex;
+    gap: 8px;
+}
+
+.footer-sub-input {
+    flex: 1;
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #fff;
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.footer-sub-input:focus {
+    border-color: #d4af37;
+}
+
+.footer-sub-btn {
+    background: linear-gradient(135deg, #d4af37, #b48c1e);
+    color: #070a12;
+    border: none;
+    border-radius: 10px;
+    padding: 0 16px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+/* Footer Bottom Bar with Mohasin Raza Signature */
+.footer-bottom-bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 24px 0;
+    background: #03050a;
+}
+
+.footer-bottom-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 0.85rem;
+}
+
+.footer-copy {
+    color: #64748b;
+}
+
+.footer-creator {
+    display: flex;
+    align-items: center;
+}
+
+.creator-badge {
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    color: #cbd5e1;
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 0.82rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.creator-badge strong {
+    color: #fef08a;
+    letter-spacing: 0.02em;
+}
+
+/* ==========================================================
+   LIGHT MODE THEME OVERRIDES (Triggered by data-theme="light")
+   ========================================================== */
+
+[data-theme="light"] {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+}
+
+[data-theme="light"] body {
+    background-color: #f6f8fc !important;
+    background-image: 
+        radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 35%) !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .site-header {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .brand strong {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .nav-links a {
+    color: #334155 !important;
+}
+
+[data-theme="light"] .nav-links a:hover {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .theme-toggle-btn {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .pillar-card,
+[data-theme="light"] .luxury-category-card,
+[data-theme="light"] .luxury-room-card,
+[data-theme="light"] .testimonial-card,
+[data-theme="light"] .luxury-auth-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06) !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .room-card-title,
+[data-theme="light"] .section-main-title,
+[data-theme="light"] .pillar-card h4,
+[data-theme="light"] .luxury-category-card h3,
+[data-theme="light"] .testi-author strong,
+[data-theme="light"] .auth-title {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .luxury-search-dock {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .search-input-col input,
+[data-theme="light"] .search-input-col select,
+[data-theme="light"] .luxury-input,
+[data-theme="light"] .luxury-select {
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .luxury-footer {
+    background: #0f172a !important;
+}
+
+@media (max-width: 900px) {
+    .luxury-footer-inner {
+        grid-template-columns: 1fr;
+    }
+}

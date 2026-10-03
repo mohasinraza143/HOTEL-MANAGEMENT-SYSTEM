@@ -8,13 +8,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20261003-2">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20261003-3">
     {% block extra_head %}{% endblock %}
+    <script>
+        // Immediately apply saved theme to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('aurora_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
 </head>
 <body>
     <div class="top-strip">
         <div class="container top-strip-inner">
-            <span>✨ Aurora Haven Luxury Hotel & Resort</span>
+            <span>✨ Aurora Haven 5-Star Luxury Resort & Suites</span>
             <span>24/7 AI Concierge Assistant &bull; Smart Room Matching &bull; Seamless Online Booking</span>
         </div>
     </div>
@@ -52,6 +59,11 @@
                     <a href="{% url 'login' %}">Login</a>
                     <a class="nav-highlight" href="{% url 'register' %}">Register</a>
                 {% endif %}
+
+                <!-- Dark / Light Mode Toggle Button -->
+                <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Theme" title="Toggle Dark/Light Mode">
+                    <span id="themeIcon">🌙</span>
+                </button>
             </div>
         </nav>
     </header>
@@ -111,28 +123,107 @@
         </form>
     </div>
 
-    <footer class="site-footer container">
-        <div class="footer-brand-block">
-            <span class="footer-label">Aurora Haven</span>
-            <h3>Luxury accommodation powered by intelligent AI hospitality.</h3>
-            <p>Explore handcrafted room suites, real-time availability, smart AI recommendations, and 24/7 concierge assistance.</p>
-        </div>
-        <div class="footer-links-block">
-            <div class="footer-links">
-                <a href="{% url 'rooms' %}">Explore Rooms</a>
-                <a href="{% url 'booking' %}">Make a Booking</a>
-                <a href="{% url 'booking_history' %}">My Reservations</a>
-                {% if request.user.is_staff or request.user.is_superuser %}
-                    <a href="{% url 'admin_dashboard' %}">Staff Admin Portal</a>
-                {% endif %}
+    <!-- Professional 5-Star Luxury Footer -->
+    <footer class="luxury-footer">
+        <div class="container luxury-footer-inner">
+            <!-- Brand Column -->
+            <div class="footer-col footer-col-brand">
+                <div class="footer-brand">
+                    <span class="brand-mark">AH</span>
+                    <div>
+                        <strong style="color: #fff; font-size: 1.2rem; display: block;">Aurora Haven</strong>
+                        <small style="color: #d4af37; font-weight: 600;">Luxury Hotel & Suites</small>
+                    </div>
+                </div>
+                <p class="footer-desc">
+                    Experience world-class hospitality, panoramic ocean & city views, and 24/7 AI-guided guest services crafted for an unforgettable stay.
+                </p>
+                <div class="footer-contact-info">
+                    <div>📍 742 Skyline Boulevard, Coastal Haven</div>
+                    <div>📞 +1 (800) 555-AURORA</div>
+                    <div>✉️ concierge@aurorahaven.com</div>
+                </div>
             </div>
-            <small>&copy; 2026 Aurora Haven Hotel & Resort. All rights reserved.</small>
+
+            <!-- Quick Links -->
+            <div class="footer-col">
+                <h4 class="footer-title">Suites & Stays</h4>
+                <ul class="footer-nav">
+                    <li><a href="{% url 'rooms' %}">All Rooms & Suites</a></li>
+                    <li><a href="{% url 'home' %}#aiMatcherSection">✨ AI Smart Matcher</a></li>
+                    <li><a href="{% url 'rooms' %}?category=7">Presidential Penthouse</a></li>
+                    <li><a href="{% url 'booking' %}">Make a Reservation</a></li>
+                </ul>
+            </div>
+
+            <!-- Guest Services -->
+            <div class="footer-col">
+                <h4 class="footer-title">Guest Services</h4>
+                <ul class="footer-nav">
+                    <li><a href="{% url 'booking_history' %}">My Bookings & Receipts</a></li>
+                    <li><a href="javascript:void(0)" onclick="document.getElementById('aiChatDrawer').classList.add('open')">24/7 AI Concierge</a></li>
+                    {% if request.user.is_staff or request.user.is_superuser %}
+                        <li><a href="{% url 'admin_dashboard' %}" style="color: #60a5fa; font-weight: 700;">⚙️ Staff Admin Portal</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'home' %}">Cancellation Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter / VIP Club -->
+            <div class="footer-col">
+                <h4 class="footer-title">Aurora VIP Club</h4>
+                <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.5; margin: 0 0 14px 0;">
+                    Subscribe for exclusive suite offers, private rooftop events, and secret rate discounts.
+                </p>
+                <div class="footer-subscribe-box">
+                    <input type="email" placeholder="Enter your email" class="footer-sub-input">
+                    <button type="button" class="footer-sub-btn" onclick="alert('Thank you for joining Aurora VIP Club!')">Join</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professional Copyright Bar with Mohasin Raza Signature -->
+        <div class="footer-bottom-bar">
+            <div class="container footer-bottom-inner">
+                <div class="footer-copy">
+                    &copy; 2026 <strong>Aurora Haven Hotel & Resort</strong>. All Rights Reserved.
+                </div>
+                <div class="footer-creator">
+                    <span class="creator-badge">
+                        Designed & Developed with ❤️ by <strong>Mohasin Raza</strong>
+                    </span>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <!-- AI Concierge Client Script -->
+    <!-- Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Dark / Light Mode Toggle
+            const themeBtn = document.getElementById('themeToggleBtn');
+            const themeIcon = document.getElementById('themeIcon');
+            const htmlEl = document.documentElement;
+
+            function updateThemeIcon(theme) {
+                if (themeIcon) {
+                    themeIcon.textContent = theme === 'light' ? '☀️' : '🌙';
+                }
+            }
+
+            const currentTheme = htmlEl.getAttribute('data-theme') || 'dark';
+            updateThemeIcon(currentTheme);
+
+            if (themeBtn) {
+                themeBtn.addEventListener('click', function() {
+                    const newTheme = htmlEl.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                    htmlEl.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('aurora_theme', newTheme);
+                    updateThemeIcon(newTheme);
+                });
+            }
+
+            // AI Concierge Client Script
             const launcher = document.getElementById('aiLauncherBtn');
             const drawer = document.getElementById('aiChatDrawer');
             const closeBtn = document.getElementById('aiCloseBtn');
@@ -171,7 +262,6 @@
                 function appendMessage(text, sender) {
                     const msgDiv = document.createElement('div');
                     msgDiv.className = 'ai-msg ' + sender;
-                    // Format markdown-like bold text & bullet points
                     let formatted = text
                         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                         .replace(/\n/g, '<br>');
@@ -194,7 +284,7 @@
                         card.className = 'ai-room-card';
                         card.innerHTML = `
                             <div class="ai-room-thumb">
-                                <img src="${room.image}" alt="${room.room_number}">
+                                <img src="${room.image}" alt="${room.room_number}" onerror="this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=150&q=80'">
                             </div>
                             <div class="ai-room-info">
                                 <strong>Room ${room.room_number} &bull; ${room.category}</strong>
@@ -210,10 +300,7 @@
 
                 function sendMessage(text) {
                     appendMessage(text, 'user');
-
-                    // Typing indicator
                     const typingDiv = appendMessage('<em>Aurora AI is thinking...</em>', 'bot');
-
                     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
 
                     fetch('/api/ai/chat/', {

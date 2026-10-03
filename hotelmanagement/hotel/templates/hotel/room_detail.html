@@ -1,87 +1,135 @@
 {% extends 'hotel/base.html' %}
 
-{% block title %}Aurora Haven | Room {{ room.room_number }}{% endblock %}
+{% block title %}Aurora Haven | Room {{ room.room_number }} - {{ room.category.name }}{% endblock %}
 
 {% block content %}
-<section class="container detail-page section-space-small">
-    <div class="detail-page-head">
-        <div>
-            <span class="section-tag">{{ room.category.name }}</span>
-            <h1>Room {{ room.room_number }}</h1>
-            <p>Exceptional hospitality, curated interior styling, and full guest amenity access.</p>
-        </div>
-        <div class="detail-price-card">
-            <small>Price per night</small>
-            <strong>${{ room.price }}</strong>
-            <span class="availability-badge {% if room.availability %}available{% else %}unavailable{% endif %}">
-                {% if room.availability %}Available now{% else %}Unavailable{% endif %}
-            </span>
-        </div>
+<section class="container section-space-small">
+    <!-- Breadcrumb -->
+    <div style="display: flex; gap: 8px; font-size: 0.85rem; color: #94a3b8; margin-bottom: 20px;">
+        <a href="{% url 'home' %}" style="color: #d4af37;">Home</a> &rarr;
+        <a href="{% url 'rooms' %}" style="color: #d4af37;">Rooms</a> &rarr;
+        <span style="color: #fff;">Room {{ room.room_number }}</span>
     </div>
 
-    <div class="detail-layout">
-        <div class="detail-media">
-            <img src="{{ room.image }}" alt="Room {{ room.room_number }}" onerror="this.src='/static/images/room1.webp'">
+    <!-- Main Detail Layout -->
+    <div style="display: grid; grid-template-columns: 1.4fr 0.6fr; gap: 32px; align-items: start;">
+        <!-- Left Column: Media & Overview -->
+        <div>
+            <div style="border-radius: 24px; overflow: hidden; height: 420px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.4); margin-bottom: 28px;">
+                <img src="{{ room.image }}" alt="Room {{ room.room_number }}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80'">
+                <div style="position: absolute; top: 20px; left: 20px; display: flex; gap: 10px;">
+                    <span class="room-badge-avail {% if room.availability %}is-avail{% else %}is-booked{% endif %}">
+                        {% if room.availability %}● Available for Check-in{% else %}○ Reserved{% endif %}
+                    </span>
+                    <span class="room-badge-category">{{ room.category.name }}</span>
+                </div>
+            </div>
+
+            <!-- Description & Amenities -->
+            <div class="luxury-room-card" style="padding: 30px; margin-bottom: 28px;">
+                <h2 style="font-size: 1.8rem; color: #fff; margin: 0 0 12px 0;">About This Accommodation</h2>
+                <p style="color: #cbd5e1; font-size: 1rem; line-height: 1.7; margin: 0 0 24px 0;">{{ room.description }}</p>
+
+                <h3 style="font-size: 1.2rem; color: #fff; margin: 0 0 16px 0; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px;">Included Luxury Amenities</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+                    <div style="display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.9rem;">
+                        <span>📶</span> High-speed Wi-Fi (1 Gbps)
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.9rem;">
+                        <span>🥐</span> Gourmet Breakfast Buffet
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.9rem;">
+                        <span>🏊‍♂️</span> Rooftop Infinity Pool Access
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.9rem;">
+                        <span>🍸</span> En-suite Mini Bar & Espresso
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.9rem;">
+                        <span>🧖‍♀️</span> Luxury Bathrobe & Slippers
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.9rem;">
+                        <span>❄️</span> Climate Controlled AC
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.2rem; color: #fff; margin: 24px 0 14px 0; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px;">Hotel House Policies</h3>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: #94a3b8;">
+                    <div>🕒 <strong>Check-in:</strong> 2:00 PM onwards &bull; <strong>Check-out:</strong> Up to 11:00 AM</div>
+                    <div>🛡️ <strong>Cancellation:</strong> 100% free cancellation up to 24 hours prior to arrival.</div>
+                    <div>🚭 <strong>Non-Smoking:</strong> All indoor suites are strictly 100% non-smoking.</div>
+                </div>
+            </div>
         </div>
 
-        <div class="detail-copy">
-            <p class="detail-description">{{ room.description }}</p>
-
-            <div class="detail-points">
-                <div>
-                    <span>Room number</span>
-                    <strong>{{ room.room_number }}</strong>
+        <!-- Right Column: Booking Action Card -->
+        <div>
+            <div class="luxury-search-dock" style="margin-top: 0; padding: 28px; position: sticky; top: 100px;">
+                <span class="luxury-kicker">Guaranteed Best Rate</span>
+                <div style="display: flex; align-items: baseline; gap: 6px; margin: 6px 0 20px 0;">
+                    <strong style="font-size: 2.2rem; color: #34d399;">${{ room.price }}</strong>
+                    <span style="color: #94a3b8; font-size: 0.95rem;">/ night</span>
                 </div>
-                <div>
-                    <span>Category</span>
-                    <strong>{{ room.category.name }}</strong>
-                </div>
-                <div>
-                    <span>Status</span>
-                    <strong>{% if room.availability %}Available tonight{% else %}Sold out{% endif %}</strong>
-                </div>
-            </div>
 
-            <div class="room-feature-strip detail-strip">
-                <span>Free Ultra-fast Wi-Fi</span>
-                <span>Gourmet Breakfast</span>
-                <span>Rooftop Pool Access</span>
-                <span>24/7 Room Service</span>
-            </div>
+                <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;">
+                        <span>Room Unit:</span>
+                        <strong style="color: #fff;">Room {{ room.room_number }}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;">
+                        <span>Class:</span>
+                        <strong style="color: #d4af37;">{{ room.category.name }}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;">
+                        <span>Current Status:</span>
+                        <strong style="color: {% if room.availability %}#34d399{% else %}#f87171{% endif %};">
+                            {% if room.availability %}Ready to Reserve{% else %}Sold Out{% endif %}
+                        </strong>
+                    </div>
+                </div>
 
-            <div class="card-actions">
                 {% if room.availability %}
-                    <a class="btn btn-primary" href="{% url 'book_room' room.id %}">Book This Room</a>
+                    <a href="{% url 'book_room' room.id %}" class="btn-luxury-primary" style="display: block; text-align: center; width: 100%; box-sizing: border-box; font-size: 1rem; padding: 14px;">
+                        Reserve This Room &rarr;
+                    </a>
                 {% else %}
-                    <button class="btn btn-secondary" disabled style="opacity: 0.6; cursor: not-allowed;">Currently Unavailable</button>
+                    <button class="btn-luxury-primary" disabled style="width: 100%; opacity: 0.5; cursor: not-allowed;">
+                        Currently Unavailable
+                    </button>
                 {% endif %}
-                <a class="btn btn-secondary" href="{% url 'rooms' %}">&larr; Back to Rooms</a>
+
+                <p style="text-align: center; color: #94a3b8; font-size: 0.78rem; margin: 14px 0 0 0;">
+                    Instant confirmation &bull; No upfront booking fees
+                </p>
             </div>
         </div>
     </div>
 </section>
 
+<!-- Similar Accommodations -->
 {% if similar_rooms %}
 <section class="container section-space-small">
-    <div class="section-heading">
+    <div class="section-title-wrap">
         <div>
-            <span class="section-tag">Similar Accommodations</span>
-            <h2>More rooms in {{ room.category.name }}</h2>
+            <span class="luxury-kicker">More Options</span>
+            <h2 class="section-main-title">Similar Accommodations</h2>
         </div>
     </div>
 
-    <div class="featured-room-grid">
-        {% for similar_room in similar_rooms %}
-            <article class="room-card compact-room-card">
-                <div class="room-thumb-wrap">
-                    <img src="{{ similar_room.image }}" alt="Room {{ similar_room.room_number }}" onerror="this.src='/static/images/room1.webp'">
+    <div class="luxury-rooms-grid">
+        {% for sim in similar_rooms %}
+            <article class="luxury-room-card">
+                <div class="room-card-img-box">
+                    <img src="{{ sim.image }}" alt="Room {{ sim.room_number }}" onerror="this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80'">
                 </div>
-                <div class="room-card-body">
-                    <p class="room-category">{{ similar_room.category.name }}</p>
-                    <h3>Room {{ similar_room.room_number }}</h3>
-                    <div class="room-card-bottom">
-                        <strong class="room-price">${{ similar_room.price }}</strong>
-                        <a class="btn btn-secondary" href="{% url 'room_detail' similar_room.id %}">View Details</a>
+                <div class="luxury-room-card-body">
+                    <h3 class="room-card-title">Room {{ sim.room_number }}</h3>
+                    <p class="room-card-desc">{{ sim.description|truncatechars:90 }}</p>
+                    <div class="room-card-footer">
+                        <div>
+                            <small>Nightly</small>
+                            <strong>${{ sim.price }}</strong>
+                        </div>
+                        <a class="btn-card-book" href="{% url 'room_detail' sim.id %}">View &rarr;</a>
                     </div>
                 </div>
             </article>

@@ -1,63 +1,75 @@
 {% extends 'hotel/base.html' %}
 
-{% block title %}Aurora Haven | Booking Confirmation{% endblock %}
+{% block title %}Aurora Haven | Reservation Confirmed #{{ booking.id }}{% endblock %}
 
 {% block content %}
-<section class="container confirmation-page section-space-small">
-    <div class="ticket-card">
-        <div class="ticket-header">
-            <div>
-                <span class="section-tag">Reservation Confirmed</span>
-                <h1>Your stay has been secured.</h1>
-                <p class="muted-copy">This booking is saved to your account and available in your booking history.</p>
+<section class="container section-space" style="max-width: 760px; margin: 0 auto;">
+    <!-- Confirmed Pass Card -->
+    <div class="luxury-room-card" style="padding: 40px; position: relative; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.5);">
+        <!-- Top Glow Accent -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, #10b981, #d4af37, #3b82f6);"></div>
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); border: 2px solid #10b981; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 16px;">
+                ✓
             </div>
-            <span class="status-pill reserved">{{ booking.status }}</span>
+            <span class="luxury-kicker" style="color: #34d399;">Reservation Confirmed</span>
+            <h1 style="color: #fff; font-size: 2rem; margin: 4px 0 8px 0;">Your Stay Has Been Secured!</h1>
+            <p style="color: #94a3b8; font-size: 0.95rem; margin: 0;">A confirmation has been recorded under your profile. We look forward to welcoming you.</p>
         </div>
 
-        <div class="ticket-grid">
-            <div>
-                <span>Booking ID</span>
-                <strong>#{{ booking.id }}</strong>
+        <!-- Ticket Details Box -->
+        <div style="background: rgba(11, 15, 25, 0.8); border: 1px dashed rgba(255, 255, 255, 0.2); border-radius: 18px; padding: 24px; margin-bottom: 30px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 18px; margin-bottom: 18px;">
+                <div>
+                    <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Reservation Ref</span>
+                    <strong style="display: block; font-size: 1.3rem; color: #d4af37;">#AH-{{ booking.id }}</strong>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Status</span>
+                    <span class="status-badge badge-reserved" style="font-size: 0.85rem; padding: 4px 12px;">{{ booking.status }}</span>
+                </div>
             </div>
-            <div>
-                <span>Primary guest</span>
-                <strong>{{ booking.guest.name }}</strong>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 18px;">
+                <div>
+                    <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Guest</span>
+                    <strong style="display: block; color: #fff; font-size: 0.95rem;">{{ booking.guest.name }}</strong>
+                </div>
+                <div>
+                    <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Accommodation</span>
+                    <strong style="display: block; color: #fff; font-size: 0.95rem;">Room {{ booking.room.room_number }}</strong>
+                    <small style="color: #d4af37;">{{ booking.room.category.name }}</small>
+                </div>
+                <div>
+                    <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Check-in</span>
+                    <strong style="display: block; color: #fff; font-size: 0.95rem;">{{ booking.check_in|date:"M d, Y" }}</strong>
+                    <small style="color: #94a3b8;">From 2:00 PM</small>
+                </div>
+                <div>
+                    <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Check-out</span>
+                    <strong style="display: block; color: #fff; font-size: 0.95rem;">{{ booking.check_out|date:"M d, Y" }}</strong>
+                    <small style="color: #94a3b8;">By 11:00 AM</small>
+                </div>
             </div>
-            <div>
-                <span>Room class</span>
-                <strong>{{ booking.room.category.name }}</strong>
-            </div>
-            <div>
-                <span>Room number</span>
-                <strong>{{ booking.room.room_number }}</strong>
-            </div>
-            <div>
-                <span>Check-in</span>
-                <strong>{{ booking.check_in }}</strong>
-            </div>
-            <div>
-                <span>Check-out</span>
-                <strong>{{ booking.check_out }}</strong>
-            </div>
-            <div>
-                <span>Total amount</span>
-                <strong>${{ booking.total_price }}</strong>
-            </div>
-            <div>
-                <span>Status</span>
-                <strong>{{ booking.status }}</strong>
+
+            <div style="display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">
+                <span style="font-size: 0.9rem; color: #cbd5e1; font-weight: 600;">Total Amount:</span>
+                <strong style="font-size: 1.8rem; color: #34d399;">${{ booking.total_price }}</strong>
             </div>
         </div>
 
-        <div class="detail-feature-list summary-feature-list">
-            <span>Reservation recorded</span>
-            <span>Booking history available</span>
-            <span>Status can be updated later</span>
-        </div>
-
-        <div class="card-actions">
-            <a class="btn btn-primary" href="{% url 'booking_history' %}">Manage Bookings</a>
-            <a class="btn btn-secondary" href="{% url 'rooms' %}">Book Another Room</a>
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <button onclick="window.print()" class="btn-luxury-glass" style="cursor: pointer;">
+                🖨️ Print Receipt
+            </button>
+            <a href="{% url 'booking_history' %}" class="btn-luxury-primary">
+                View in My Bookings &rarr;
+            </a>
+            <a href="{% url 'rooms' %}" class="btn-card-details" style="padding: 14px 20px;">
+                Explore More Rooms
+            </a>
         </div>
     </div>
 </section>

@@ -1,100 +1,111 @@
 {% extends 'hotel/base.html' %}
 
-{% block title %}Aurora Haven | Rooms & Suites{% endblock %}
+{% block title %}Aurora Haven | Suites & Accommodations{% endblock %}
 
 {% block content %}
-<section class="container listing-hero section-space-small">
-    <div class="listing-hero-copy">
-        <span class="section-tag">Room Inventory</span>
-        <h1>Compare hotel rooms and book the stay that fits best.</h1>
-        <p>Explore luxury suites, filter by price or room class, or let our AI Concierge recommend your perfect accommodation.</p>
-    </div>
-    <div class="listing-summary-card">
-        <span>Available options</span>
-        <strong>{{ rooms|length }}</strong>
-        <p>Real-time live hotel availability</p>
+<!-- Rooms Page Header -->
+<section class="container section-space-small">
+    <div class="section-title-wrap" style="align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div>
+            <span class="luxury-kicker">Curated Stays</span>
+            <h1 class="section-main-title" style="font-size: 2.4rem;">Suites & Accommodations</h1>
+            <p style="color: #94a3b8; font-size: 1rem; margin: 6px 0 0 0;">Compare room classes, real-time availability, and reserve your luxury escape.</p>
+        </div>
+        <div style="background: rgba(17, 24, 39, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px 20px; text-align: right;">
+            <span style="font-size: 0.8rem; color: #94a3b8; display: block;">Live Results</span>
+            <strong style="font-size: 1.5rem; color: #34d399;">{{ rooms|length }} Room{{ rooms|length|pluralize }}</strong>
+        </div>
     </div>
 </section>
 
-<!-- Filter Panel -->
-<section class="container section-space-small">
-    <form class="filter-panel" method="get">
-        <div class="form-group">
-            <label for="search">Search rooms</label>
-            <input id="search" type="text" name="search" value="{{ search_text }}" placeholder="Deluxe, Suite, SR-101...">
+<!-- Filter Toolbar -->
+<section class="container" style="margin-bottom: 30px;">
+    <div class="luxury-search-dock" style="margin-top: 0; padding: 20px;">
+        <form method="get" class="luxury-search-grid" style="grid-template-columns: 2fr 1fr 1fr 120px;">
+            <div class="search-input-col">
+                <label>Search by Room or Feature</label>
+                <input type="text" name="search" value="{{ search_text }}" placeholder="e.g. Deluxe, Suite, 101, Balcony...">
+            </div>
+            <div class="search-input-col">
+                <label>Category Filter</label>
+                <select name="category">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:'s' %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="search-input-col">
+                <label>Availability</label>
+                <select name="availability">
+                    <option value="" {% if not availability_filter %}selected{% endif %}>All Rooms</option>
+                    <option value="available" {% if availability_filter == 'available' %}selected{% endif %}>Available Only</option>
+                    <option value="unavailable" {% if availability_filter == 'unavailable' %}selected{% endif %}>Sold Out</option>
+                </select>
+            </div>
+            <div class="search-action-col">
+                <button type="submit" class="btn-luxury-search" style="height: 46px;">Filter</button>
+            </div>
+        </form>
+
+        <!-- Quick Filter Pills -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; pt-2; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 12px;">
+            <a href="{% url 'rooms' %}" class="btn-luxury-glass" style="padding: 4px 12px; font-size: 0.78rem; {% if not selected_category %}border-color: #d4af37; color: #fef08a;{% endif %}">All</a>
+            {% for cat in categories %}
+                <a href="{% url 'rooms' %}?category={{ cat.id }}" class="btn-luxury-glass" style="padding: 4px 12px; font-size: 0.78rem; {% if selected_category == cat.id|stringformat:'s' %}border-color: #d4af37; color: #fef08a;{% endif %}">
+                    {{ cat.name }}
+                </a>
+            {% endfor %}
         </div>
-        <div class="form-group">
-            <label for="category">Room type</label>
-            <select id="category" name="category">
-                <option value="">All room types</option>
-                {% for category in categories %}
-                    <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:'s' %}selected{% endif %}>{{ category.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="availability">Stay status</label>
-            <select id="availability" name="availability">
-                <option value="" {% if not availability_filter %}selected{% endif %}>Any</option>
-                <option value="available" {% if availability_filter == 'available' %}selected{% endif %}>Available Only</option>
-                <option value="unavailable" {% if availability_filter == 'unavailable' %}selected{% endif %}>Sold Out</option>
-            </select>
-        </div>
-        <div class="filter-actions">
-            <button class="btn btn-primary" type="submit">Apply Filters</button>
-            <a class="btn btn-secondary" href="{% url 'rooms' %}">Reset</a>
-        </div>
-    </form>
+    </div>
 </section>
 
-<!-- Room Listing Stack -->
+<!-- Rooms Grid -->
 <section class="container section-space-small">
-    <div class="listing-stack">
+    <div class="luxury-rooms-grid">
         {% for room in rooms %}
-            <article class="listing-card">
-                <div class="listing-card-media">
-                    <img src="{{ room.image }}" alt="Room {{ room.room_number }}" onerror="this.src='/static/images/room1.webp'">
+            <article class="luxury-room-card">
+                <div class="room-card-img-box">
+                    <img src="{{ room.image }}" alt="Room {{ room.room_number }}" onerror="this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80'">
+                    <span class="room-badge-avail {% if room.availability %}is-avail{% else %}is-booked{% endif %}">
+                        {% if room.availability %}● Available{% else %}○ Sold Out{% endif %}
+                    </span>
+                    <span class="room-badge-category">{{ room.category.name }}</span>
                 </div>
-                <div class="listing-card-content">
-                    <div class="listing-head">
-                        <div>
-                            <p class="room-category">{{ room.category.name }}</p>
-                            <h3>{{ room.category.name }}</h3>
-                            <p class="room-number-label">Room {{ room.room_number }}</p>
-                        </div>
-                        <span class="availability-badge {% if room.availability %}available{% else %}unavailable{% endif %}">
-                            {% if room.availability %}Available tonight{% else %}Sold out{% endif %}
-                        </span>
+                <div class="luxury-room-card-body">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
+                        <h3 class="room-card-title">Room {{ room.room_number }}</h3>
+                        <div class="room-card-rating">★ 4.95</div>
                     </div>
-                    <p class="listing-description">{{ room.description|truncatechars:150 }}</p>
-                    <div class="room-feature-strip">
+                    <p class="room-card-desc">{{ room.description|truncatechars:120 }}</p>
+                    
+                    <div class="room-amenity-tags">
                         <span>Free Wi-Fi</span>
-                        <span>Breakfast included</span>
-                        <span>Air-conditioned room</span>
-                        <span>Flexible Cancellation</span>
+                        <span>King Bed</span>
+                        <span>Breakfast Included</span>
                     </div>
-                </div>
-                <div class="listing-card-side">
-                    <div class="listing-price-box">
-                        <small>Per night</small>
-                        <strong>${{ room.price }}</strong>
-                        <span>Taxes and fees included</span>
-                    </div>
-                    <div class="listing-actions">
-                        <a class="btn btn-secondary" href="{% url 'room_detail' room.id %}">View Details</a>
-                        {% if room.availability %}
-                            <a class="btn btn-primary" href="{% url 'book_room' room.id %}">Book Now</a>
-                        {% else %}
-                            <button class="btn btn-secondary" disabled style="opacity: 0.6; cursor: not-allowed;">Unavailable</button>
-                        {% endif %}
+
+                    <div class="room-card-footer">
+                        <div>
+                            <small>Per Night</small>
+                            <strong>${{ room.price }}</strong>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <a class="btn-card-details" href="{% url 'room_detail' room.id %}">Details</a>
+                            {% if room.availability %}
+                                <a class="btn-card-book" href="{% url 'book_room' room.id %}">Book Now &rarr;</a>
+                            {% else %}
+                                <button class="btn-card-details" disabled style="opacity: 0.5; cursor: not-allowed;">Unavailable</button>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </article>
         {% empty %}
-            <div class="empty-state">
-                <h3>No rooms matched your filters.</h3>
-                <p>Try clearing one or more filters or ask our AI Concierge for recommendations.</p>
-                <a class="btn btn-primary" href="{% url 'rooms' %}">Show All Rooms</a>
+            <div style="grid-column: 1/-1; background: rgba(17, 24, 39, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 48px; text-align: center;">
+                <h3 style="color: #fff; margin-bottom: 8px;">No rooms match your filter.</h3>
+                <p style="color: #94a3b8; margin-bottom: 20px;">Try clearing filters or ask our 24/7 AI Concierge for recommendations.</p>
+                <a class="btn-luxury-primary" href="{% url 'rooms' %}">Show All Rooms &rarr;</a>
             </div>
         {% endfor %}
     </div>

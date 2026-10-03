@@ -1,122 +1,175 @@
 {% extends 'hotel/base.html' %}
 
-{% block title %}Aurora Haven | Book Room{% endblock %}
+{% block title %}Aurora Haven | Secure Room Reservation{% endblock %}
 
 {% block content %}
-<section class="container booking-page section-space-small">
-    <div class="booking-page-header">
-        <span class="section-tag">Booking Form</span>
-        <h1>Complete your reservation details.</h1>
-        <p>Enter guest information, choose dates, and confirm the room in a clean booking flow.</p>
+<section class="container section-space-small">
+    <!-- Header -->
+    <div class="section-title-wrap">
+        <div>
+            <span class="luxury-kicker">Secure Booking</span>
+            <h1 class="section-main-title" style="font-size: 2.2rem;">Complete Your Reservation</h1>
+            <p style="color: #94a3b8; font-size: 0.95rem; margin: 6px 0 0 0;">Enter your stay details and confirm your reservation with instant confirmation.</p>
+        </div>
     </div>
 
-    <div class="booking-layout">
-        <div class="booking-form-card">
-            <div class="section-heading left-align">
-                <div>
-                    <h2>Guest details</h2>
-                </div>
-            </div>
+    <!-- Booking Layout -->
+    <div style="display: grid; grid-template-columns: 1.35fr 0.65fr; gap: 32px; align-items: start;">
+        <!-- Left Column: Form -->
+        <div class="luxury-room-card" style="padding: 32px;">
+            <h2 style="font-size: 1.4rem; color: #fff; margin: 0 0 20px 0; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px;">
+                Guest & Stay Information
+            </h2>
 
             <form method="post" id="booking-form">
                 {% csrf_token %}
-                <div class="form-row">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px;">
                     <div class="form-group">
-                        <label for="guest_name">Guest name</label>
-                        <input id="guest_name" type="text" name="guest_name" value="{{ form_data.guest_name }}" placeholder="Enter guest full name">
+                        <label for="guest_name" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Guest Full Name *</label>
+                        <input id="guest_name" type="text" name="guest_name" value="{{ form_data.guest_name }}" placeholder="e.g. John Doe" class="luxury-input" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone number</label>
-                        <input id="phone" type="text" name="phone" value="{{ form_data.phone }}" placeholder="Enter contact number">
+                        <label for="phone" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Contact Phone *</label>
+                        <input id="phone" type="text" name="phone" value="{{ form_data.phone }}" placeholder="+1 (555) 000-0000" class="luxury-input" required>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="room">Select room type</label>
-                    <select id="room" name="room">
-                        <option value="">Choose a room</option>
-                        {% for room in rooms %}
-                            <option value="{{ room.id }}" data-price="{{ room.price }}" {% if form_data.room == room.id|stringformat:'s' %}selected{% endif %}>
-                                {{ room.room_number }} - {{ room.category.name }} - ${{ room.price }}/night
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="room" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Select Room / Suite *</label>
+                    <select id="room" name="room" class="luxury-select" required>
+                        <option value="">Select an available room...</option>
+                        {% for r in rooms %}
+                            <option value="{{ r.id }}" data-price="{{ r.price }}" data-image="{{ r.image }}" data-category="{{ r.category.name }}" data-num="{{ r.room_number }}" {% if form_data.room == r.id|stringformat:'s' %}selected{% endif %}>
+                                Room {{ r.room_number }} - {{ r.category.name }} (${{ r.price }}/night)
                             </option>
                         {% endfor %}
                     </select>
                 </div>
 
-                <div class="form-row">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px;">
                     <div class="form-group">
-                        <label for="check_in">Check-in date</label>
-                        <input id="check_in" type="date" name="check_in" value="{{ form_data.check_in }}">
+                        <label for="check_in" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Check-in Date *</label>
+                        <input id="check_in" type="date" name="check_in" value="{{ form_data.check_in }}" class="luxury-input" required>
                     </div>
                     <div class="form-group">
-                        <label for="check_out">Check-out date</label>
-                        <input id="check_out" type="date" name="check_out" value="{{ form_data.check_out }}">
+                        <label for="check_out" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Check-out Date *</label>
+                        <input id="check_out" type="date" name="check_out" value="{{ form_data.check_out }}" class="luxury-input" required>
                     </div>
                 </div>
 
-                <button class="btn btn-primary btn-block" type="submit">Confirm Reservation</button>
+                <button class="btn-luxury-primary" type="submit" style="width: 100%; height: 52px; font-size: 1.05rem;">
+                    Confirm & Reserve Stay &rarr;
+                </button>
             </form>
         </div>
 
-        <aside class="booking-summary-card">
-            <span class="section-tag">Stay Summary</span>
-            <h2>Your selected stay</h2>
+        <!-- Right Column: Stay Preview & Price Calculator -->
+        <div>
+            <div class="luxury-search-dock" style="margin-top: 0; padding: 24px; position: sticky; top: 100px;">
+                <span class="luxury-kicker">Reservation Summary</span>
+                <h3 style="margin: 4px 0 16px 0; color: #fff; font-size: 1.25rem;">Stay Breakdown</h3>
 
-            {% if selected_room %}
-                <img class="summary-image" src="/static/images/room1.webp" alt="Room {{ selected_room.room_number }}">
-                <div class="summary-line"><span>Room</span><strong>{{ selected_room.room_number }}</strong></div>
-                <div class="summary-line"><span>Category</span><strong>{{ selected_room.category.name }}</strong></div>
-                <div class="summary-line"><span>Price</span><strong>${{ selected_room.price }}/night</strong></div>
-            {% else %}
-                <p class="muted-copy">Select a room to preview your stay details here.</p>
-            {% endif %}
+                <!-- Room Preview Thumbnail -->
+                <div style="height: 140px; border-radius: 14px; overflow: hidden; margin-bottom: 16px; background: #0b0f19;">
+                    <img id="summaryRoomImg" src="{% if selected_room %}{{ selected_room.image }}{% else %}https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80{% endif %}" alt="Room Preview" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80'">
+                </div>
 
-            <div class="estimate-box">
-                <div class="summary-line"><span>Nights</span><strong id="night-count">0</strong></div>
-                <div class="summary-line total"><span>Estimated total</span><strong id="total-price">$0.00</strong></div>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #cbd5e1;">
+                        <span>Selected Room:</span>
+                        <strong id="summaryRoomName" style="color: #fff;">
+                            {% if selected_room %}Room {{ selected_room.room_number }}{% else %}Select a room{% endif %}
+                        </strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #cbd5e1;">
+                        <span>Category:</span>
+                        <strong id="summaryCategory" style="color: #d4af37;">
+                            {% if selected_room %}{{ selected_room.category.name }}{% else %}&mdash;{% endif %}
+                        </strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #cbd5e1;">
+                        <span>Nightly Tariff:</span>
+                        <strong id="summaryPrice" style="color: #fff;">
+                            {% if selected_room %}${{ selected_room.price }}{% else %}$0.00{% endif %}
+                        </strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #cbd5e1;">
+                        <span>Length of Stay:</span>
+                        <strong id="nightCount" style="color: #60a5fa;">0 Night(s)</strong>
+                    </div>
+                </div>
+
+                <!-- Total Box -->
+                <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 16px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                        <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Estimated Total:</span>
+                        <strong id="totalPrice" style="font-size: 1.8rem; color: #34d399;">$0.00</strong>
+                    </div>
+                    <small style="color: #94a3b8; font-size: 0.75rem; display: block; margin-top: 4px;">Includes all taxes, Wi-Fi & breakfast</small>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.78rem; color: #94a3b8;">
+                    <div>🛡️ <strong>Free Cancellation:</strong> Up to 24h prior</div>
+                    <div>⚡ <strong>Instant Confirmation:</strong> No wait times</div>
+                </div>
             </div>
-
-            <div class="summary-points">
-                <span>Instant price estimate</span>
-                <span>Simple booking flow</span>
-                <span>Reservation status tracking</span>
-            </div>
-
-            <p class="muted-copy">The final total is calculated automatically using room price multiplied by the number of nights.</p>
-        </aside>
+        </div>
     </div>
 </section>
 
+<!-- Live Night and Price Calculator Script -->
 <script>
+document.addEventListener('DOMContentLoaded', function() {
     const roomSelect = document.getElementById('room');
     const checkInInput = document.getElementById('check_in');
     const checkOutInput = document.getElementById('check_out');
-    const nightCount = document.getElementById('night-count');
-    const totalPrice = document.getElementById('total-price');
+    const nightCountEl = document.getElementById('nightCount');
+    const totalPriceEl = document.getElementById('totalPrice');
+    const summaryRoomName = document.getElementById('summaryRoomName');
+    const summaryCategory = document.getElementById('summaryCategory');
+    const summaryPrice = document.getElementById('summaryPrice');
+    const summaryRoomImg = document.getElementById('summaryRoomImg');
 
-    function updateEstimate() {
-        const selectedOption = roomSelect.options[roomSelect.selectedIndex];
-        const roomPrice = Number(selectedOption ? selectedOption.dataset.price : 0);
-        const checkInDate = new Date(checkInInput.value);
-        const checkOutDate = new Date(checkOutInput.value);
-
-        if (!roomPrice || Number.isNaN(checkInDate.getTime()) || Number.isNaN(checkOutDate.getTime())) {
-            nightCount.textContent = '0';
-            totalPrice.textContent = '$0.00';
+    function calculateStay() {
+        const option = roomSelect.options[roomSelect.selectedIndex];
+        if (!option || !option.value) {
+            nightCountEl.textContent = '0 Night(s)';
+            totalPriceEl.textContent = '$0.00';
             return;
         }
 
-        const difference = checkOutDate.getTime() - checkInDate.getTime();
-        const nights = Math.max(Math.round(difference / (1000 * 60 * 60 * 24)), 0);
-        const total = roomPrice * nights;
+        const price = parseFloat(option.dataset.price || 0);
+        const image = option.dataset.image;
+        const category = option.dataset.category;
+        const num = option.dataset.num;
 
-        nightCount.textContent = String(nights);
-        totalPrice.textContent = `$${total.toFixed(2)}`;
+        if (summaryRoomName) summaryRoomName.textContent = 'Room ' + num;
+        if (summaryCategory) summaryCategory.textContent = category;
+        if (summaryPrice) summaryPrice.textContent = '$' + price.toFixed(2);
+        if (summaryRoomImg && image) summaryRoomImg.src = image;
+
+        const checkIn = new Date(checkInInput.value);
+        const checkOut = new Date(checkOutInput.value);
+
+        if (checkIn && checkOut && !isNaN(checkIn.getTime()) && !isNaN(checkOut.getTime()) && checkOut > checkIn) {
+            const diffTime = checkOut.getTime() - checkIn.getTime();
+            const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const total = price * nights;
+
+            nightCountEl.textContent = nights + ' Night' + (nights > 1 ? 's' : '');
+            totalPriceEl.textContent = '$' + total.toFixed(2);
+        } else {
+            nightCountEl.textContent = '0 Night(s)';
+            totalPriceEl.textContent = '$0.00';
+        }
     }
 
-    roomSelect.addEventListener('change', updateEstimate);
-    checkInInput.addEventListener('input', updateEstimate);
-    checkOutInput.addEventListener('input', updateEstimate);
-    updateEstimate();
+    roomSelect.addEventListener('change', calculateStay);
+    checkInInput.addEventListener('change', calculateStay);
+    checkOutInput.addEventListener('change', calculateStay);
+
+    // Initial run
+    calculateStay();
+});
 </script>
 {% endblock %}

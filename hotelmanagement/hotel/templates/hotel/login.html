@@ -1,31 +1,40 @@
 {% extends 'hotel/base.html' %}
 
-{% block title %}Aurora Haven | Login{% endblock %}
+{% block title %}Aurora Haven | Guest Login{% endblock %}
 
 {% block content %}
-<section class="container auth-page section-space-small">
-    <div class="auth-card">
-        <div class="auth-copy">
-            <span class="section-tag">Login</span>
-            <h1>Sign in to manage your bookings.</h1>
-            <p>Use your account to reserve rooms, view booking history, and track reservation status.</p>
+<section class="container auth-page section-space">
+    <div class="luxury-auth-card">
+        <div class="auth-header">
+            <div class="auth-icon-badge">🔐</div>
+            <span class="luxury-kicker">Welcome Back</span>
+            <h1 class="auth-title">Sign In to Your Account</h1>
+            <p class="auth-subtitle">Access your hotel reservations, track live stay status, and enjoy personalized concierge services.</p>
         </div>
 
-        <form method="post" class="auth-form">
+        <form method="post" class="luxury-form">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input id="username" type="text" name="username" value="{{ form_data.username }}" placeholder="Enter username">
+            
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label for="username" style="display: block; font-size: 0.82rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Username</label>
+                <input id="username" type="text" name="username" value="{{ form_data.username }}" placeholder="Enter your username" class="luxury-input" required autofocus>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input id="password" type="password" name="password" placeholder="Enter password">
+
+            <div class="form-group" style="margin-bottom: 24px;">
+                <label for="password" style="display: block; font-size: 0.82rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Password</label>
+                <input id="password" type="password" name="password" placeholder="Enter your account password" class="luxury-input" required>
             </div>
-            <button class="btn btn-primary btn-block" type="submit">Login</button>
+
+            <button class="btn-luxury-primary" type="submit" style="width: 100%; height: 50px; font-size: 1rem;">
+                Sign In &rarr;
+            </button>
         </form>
 
-        <p class="auth-switch">New here? <a href="{% url 'register' %}">Create an account</a></p>
+        <div class="auth-footer-switch">
+            <span>New guest at Aurora Haven?</span>
+            <a href="{% url 'register' %}" class="luxury-text-link">Create an account &rarr;</a>
+        </div>
     </div>
 </section>
 {% endblock %}
