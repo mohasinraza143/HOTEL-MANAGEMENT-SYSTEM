@@ -76,7 +76,8 @@ ROOM_DATA = [
         "price": Decimal("129.00"),
         "availability": True,
         "title": "City Standard Stay",
-        "description": "A clean and simple room with warm lighting, essential furniture, and a restful layout.",
+        "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=80",
+        "description": "A clean and cozy room with warm ambient lighting, essential modern furniture, and a restful layout.",
     },
     {
         "room_number": "DR-204",
@@ -84,7 +85,8 @@ ROOM_DATA = [
         "price": Decimal("169.00"),
         "availability": True,
         "title": "Golden Deluxe Retreat",
-        "description": "A stylish upgraded room with polished decor, plush bedding, and a welcoming boutique feel.",
+        "image": "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1000&q=80",
+        "description": "A stylish upgraded room with polished decor, plush king bedding, and a welcoming boutique hotel feel.",
     },
     {
         "room_number": "SUP-118",
@@ -92,7 +94,8 @@ ROOM_DATA = [
         "price": Decimal("189.00"),
         "availability": True,
         "title": "Skyline Superior Room",
-        "description": "A spacious room with elevated comfort, elegant textures, and a calm premium mood.",
+        "image": "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1000&q=80",
+        "description": "A spacious room with elevated comfort, elegant textures, panoramic skyline window, and calm mood.",
     },
     {
         "room_number": "EX-330",
@@ -100,7 +103,8 @@ ROOM_DATA = [
         "price": Decimal("229.00"),
         "availability": True,
         "title": "Executive Horizon",
-        "description": "A premium executive room with workspace functionality and luxury business-travel design.",
+        "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=80",
+        "description": "A premium executive room with ergonomic workstation, high-speed Wi-Fi, and luxury business-travel design.",
     },
     {
         "room_number": "SU-410",
@@ -108,7 +112,8 @@ ROOM_DATA = [
         "price": Decimal("289.00"),
         "availability": False,
         "title": "Royal Lounge Suite",
-        "description": "A sophisticated suite with a private lounge zone and an impressive luxury presentation.",
+        "image": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1000&q=80",
+        "description": "A sophisticated suite with private living lounge, marble en-suite bathroom, and impressive luxury finishes.",
     },
     {
         "room_number": "FR-512",
@@ -116,7 +121,8 @@ ROOM_DATA = [
         "price": Decimal("249.00"),
         "availability": True,
         "title": "Family Comfort Hub",
-        "description": "A roomy family stay with flexible sleeping layout, warm interiors, and practical comfort.",
+        "image": "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1000&q=80",
+        "description": "A roomy family stay with flexible bedding layout, warm interiors, and abundant practical comfort.",
     },
     {
         "room_number": "PS-015",
@@ -124,7 +130,8 @@ ROOM_DATA = [
         "price": Decimal("499.00"),
         "availability": True,
         "title": "Imperial Presidential Suite",
-        "description": "The hotel's signature luxury suite with grand interiors, private living space, and exclusive appeal.",
+        "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1000&q=80",
+        "description": "The hotel's signature luxury suite with grand interiors, private dining space, and ultra-exclusive penthouse appeal.",
     },
     {
         "room_number": "DR-221",
@@ -132,7 +139,8 @@ ROOM_DATA = [
         "price": Decimal("179.00"),
         "availability": True,
         "title": "Deluxe Garden Escape",
-        "description": "A deluxe option with extra style, soft ambient lighting, and a peaceful boutique atmosphere.",
+        "image": "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=1000&q=80",
+        "description": "A deluxe option with tranquil garden views, soft ambient mood lighting, and peaceful boutique vibes.",
     },
 ]
 
@@ -189,13 +197,14 @@ def seed_demo_data():
         if not category:
             continue
         accent = next((data["accent"] for data in CATEGORY_DATA if data["name"] == item["category"]), "#2563eb")
+        img = item.get("image") or build_demo_image(item["title"], accent)
         Room.objects.get_or_create(
             room_number=item["room_number"],
             defaults={
                 "category": category,
                 "price": item["price"],
                 "description": item["description"],
-                "image": build_demo_image(item["title"], accent),
+                "image": img,
                 "availability": item["availability"],
             },
         )
