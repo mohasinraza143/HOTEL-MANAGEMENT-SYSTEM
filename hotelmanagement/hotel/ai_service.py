@@ -78,10 +78,10 @@ def ask_concierge(query, user=None):
     categories = list(Category.objects.values_list("name", flat=True))
 
     suggested_rooms = []
-    quick_replies = ["Show available rooms", "Rooms under $200", "Check-in policy", "Book a stay"]
+    quick_replies = ["Show available rooms", "Rooms under ₹5000", "Check-in policy", "Book a stay"]
 
-    # Check for budget inquiries (e.g., "under 200", "below 150", "cheap", "budget")
-    price_match = re.search(r"(?:under|below|less than|within|\$)\s*(\d+)", clean_query)
+    # Check for budget inquiries (e.g., "under 5000", "below 3000", "cheap", "budget")
+    price_match = re.search(r"(?:under|below|less than|within|\$|₹|rs\.?|inr)\s*(\d+)", clean_query)
     budget_limit = None
     if price_match:
         budget_limit = Decimal(price_match.group(1))
@@ -93,7 +93,7 @@ def ask_concierge(query, user=None):
             if matched.exists():
                 suggested_rooms = list(matched)
                 reply = (
-                    f"Here are top available rooms within your budget of ${budget_limit:.0f}/night! "
+                    f"Here are top available rooms within your budget of ₹{budget_limit:.0f}/night! "
                     f"Our {matched[0].category.name} ({matched[0].room_number}) is an excellent choice."
                 )
             else:
@@ -101,8 +101,8 @@ def ask_concierge(query, user=None):
                 if cheapest:
                     suggested_rooms = [cheapest]
                     reply = (
-                        f"We don't currently have rooms under ${budget_limit:.0f}. "
-                        f"Our most affordable available option is {cheapest.category.name} ({cheapest.room_number}) at ${cheapest.price:.2f}/night."
+                        f"We don't currently have rooms under ₹{budget_limit:.0f}. "
+                        f"Our most affordable available option is {cheapest.category.name} ({cheapest.room_number}) at ₹{cheapest.price:.2f}/night."
                     )
                 else:
                     reply = "All our rooms are currently booked. Please check back later!"
@@ -177,8 +177,8 @@ def ask_concierge(query, user=None):
         min_price = available_rooms.aggregate(Avg("price"))
         cheapest = available_rooms.order_by("price").first()
         highest = available_rooms.order_by("-price").first()
-        c_p = f"${cheapest.price:.0f}" if cheapest else "$129"
-        h_p = f"${highest.price:.0f}" if highest else "$499"
+        c_p = f"₹{cheapest.price:.0f}" if cheapest else "₹2,499"
+        h_p = f"₹{highest.price:.0f}" if highest else "₹14,999"
         reply = f"Our room rates start from **{c_p}/night** up to **{h_p}/night** for the Presidential Suite. All rates include complimentary breakfast and Wi-Fi access."
         suggested_rooms = list(available_rooms[:2])
 
@@ -234,12 +234,12 @@ def match_smart_rooms(budget=None, vibe="any", guests=1):
                 b_dec = Decimal(budget)
                 if room.price <= b_dec:
                     score += 15
-                    reasons.append(f"Fits easily within your ${b_dec:.0f} budget")
+                    reasons.append(f"Fits easily within your ₹{b_dec:.0f} budget")
                 else:
                     diff = room.price - b_dec
                     penalty = min(30, int(diff / 10))
                     score -= penalty
-                    reasons.append(f"${diff:.0f} above stated budget")
+                    reasons.append(f"₹{diff:.0f} above stated budget")
             except Exception:
                 pass
 

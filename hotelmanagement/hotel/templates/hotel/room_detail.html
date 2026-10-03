@@ -66,7 +66,7 @@
             <div class="luxury-search-dock" style="margin-top: 0; padding: 28px; position: sticky; top: 100px;">
                 <span class="luxury-kicker">Guaranteed Best Rate</span>
                 <div style="display: flex; align-items: baseline; gap: 6px; margin: 6px 0 20px 0;">
-                    <strong style="font-size: 2.2rem; color: #34d399;">${{ room.price }}</strong>
+                    <strong style="font-size: 2.2rem; color: #34d399;">₹{{ room.price }}</strong>
                     <span style="color: #94a3b8; font-size: 0.95rem;">/ night</span>
                 </div>
 
@@ -127,7 +127,7 @@
                     <div class="room-card-footer">
                         <div>
                             <small>Nightly</small>
-                            <strong>${{ sim.price }}</strong>
+                            <strong>₹{{ sim.price }}</strong>
                         </div>
                         <a class="btn-card-book" href="{% url 'room_detail' sim.id %}">View &rarr;</a>
                     </div>

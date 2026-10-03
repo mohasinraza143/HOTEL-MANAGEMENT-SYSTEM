@@ -8,7 +8,7 @@
 <div class="kpi-grid">
     <div class="kpi-card">
         <div class="kpi-label">Total Revenue</div>
-        <div class="kpi-value" style="color: #34d399;">${{ total_revenue|floatformat:2 }}</div>
+        <div class="kpi-value" style="color: #34d399;">₹{{ total_revenue|floatformat:2 }}</div>
         <div class="kpi-sub">From confirmed stays</div>
     </div>
     <div class="kpi-card">
@@ -93,7 +93,7 @@
                         <div>{{ b.check_in|date:"M d, Y" }} &rarr;</div>
                         <small style="color: var(--admin-muted);">{{ b.check_out|date:"M d, Y" }}</small>
                     </td>
-                    <td><strong style="color: #34d399;">${{ b.total_price }}</strong></td>
+                    <td><strong style="color: #34d399;">₹{{ b.total_price }}</strong></td>
                     <td>
                         <span class="status-badge 
                             {% if b.status == 'Reserved' %}badge-reserved

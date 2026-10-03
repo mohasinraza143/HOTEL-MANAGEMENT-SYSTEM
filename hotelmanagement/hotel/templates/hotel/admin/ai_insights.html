@@ -100,9 +100,9 @@
             <tr>
                 <td><strong>Room {{ r.room_number }}</strong></td>
                 <td>{{ r.category.name }}</td>
-                <td>${{ r.price }}/night</td>
+                <td>₹{{ r.price }}/night</td>
                 <td>{{ r.booking_count|default:"0" }} Stays</td>
-                <td><strong style="color: #34d399;">${{ r.revenue|default:"0.00" }}</strong></td>
+                <td><strong style="color: #34d399;">₹{{ r.revenue|default:"0.00" }}</strong></td>
                 <td>
                     {% if r.availability %}
                         <span class="status-badge badge-available">Available</span>

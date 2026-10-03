@@ -40,7 +40,7 @@
                         <option value="">Select an available room...</option>
                         {% for r in rooms %}
                             <option value="{{ r.id }}" data-price="{{ r.price }}" data-image="{{ r.image }}" data-category="{{ r.category.name }}" data-num="{{ r.room_number }}" {% if form_data.room == r.id|stringformat:'s' %}selected{% endif %}>
-                                Room {{ r.room_number }} - {{ r.category.name }} (${{ r.price }}/night)
+                                Room {{ r.room_number }} - {{ r.category.name }} (₹{{ r.price }}/night)
                             </option>
                         {% endfor %}
                     </select>
@@ -90,7 +90,7 @@
                     <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #cbd5e1;">
                         <span>Nightly Tariff:</span>
                         <strong id="summaryPrice" style="color: #fff;">
-                            {% if selected_room %}${{ selected_room.price }}{% else %}$0.00{% endif %}
+                            {% if selected_room %}₹{{ selected_room.price }}{% else %}₹0.00{% endif %}
                         </strong>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #cbd5e1;">
@@ -103,7 +103,7 @@
                 <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 16px; margin-bottom: 20px;">
                     <div style="display: flex; justify-content: space-between; align-items: baseline;">
                         <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Estimated Total:</span>
-                        <strong id="totalPrice" style="font-size: 1.8rem; color: #34d399;">$0.00</strong>
+                        <strong id="totalPrice" style="font-size: 1.8rem; color: #34d399;">₹0.00</strong>
                     </div>
                     <small style="color: #94a3b8; font-size: 0.75rem; display: block; margin-top: 4px;">Includes all taxes, Wi-Fi & breakfast</small>
                 </div>
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const option = roomSelect.options[roomSelect.selectedIndex];
         if (!option || !option.value) {
             nightCountEl.textContent = '0 Night(s)';
-            totalPriceEl.textContent = '$0.00';
+            totalPriceEl.textContent = '₹0.00';
             return;
         }
 
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (summaryRoomName) summaryRoomName.textContent = 'Room ' + num;
         if (summaryCategory) summaryCategory.textContent = category;
-        if (summaryPrice) summaryPrice.textContent = '$' + price.toFixed(2);
+        if (summaryPrice) summaryPrice.textContent = '₹' + price.toFixed(2);
         if (summaryRoomImg && image) summaryRoomImg.src = image;
 
         const checkIn = new Date(checkInInput.value);
@@ -157,10 +157,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const total = price * nights;
 
             nightCountEl.textContent = nights + ' Night' + (nights > 1 ? 's' : '');
-            totalPriceEl.textContent = '$' + total.toFixed(2);
+            totalPriceEl.textContent = '₹' + total.toFixed(2);
         } else {
             nightCountEl.textContent = '0 Night(s)';
-            totalPriceEl.textContent = '$0.00';
+            totalPriceEl.textContent = '₹0.00';
         }
     }
 

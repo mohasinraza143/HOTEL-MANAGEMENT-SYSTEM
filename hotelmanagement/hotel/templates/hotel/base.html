@@ -109,7 +109,7 @@
 
         <!-- Quick suggestion chips -->
         <div class="ai-chips-wrap">
-            <button class="ai-chip" type="button" data-prompt="Show available rooms under $200">💰 Rooms under $200</button>
+            <button class="ai-chip" type="button" data-prompt="Show available rooms under ₹5000">💰 Rooms under ₹5,000</button>
             <button class="ai-chip" type="button" data-prompt="Recommend a luxury romantic suite">👑 Luxury Suites</button>
             <button class="ai-chip" type="button" data-prompt="What are the check-in and check-out times?">🕒 Check-in timings</button>
             <button class="ai-chip" type="button" data-prompt="What amenities does the hotel offer?">🏊 Hotel Amenities</button>
@@ -288,7 +288,7 @@
                             </div>
                             <div class="ai-room-info">
                                 <strong>Room ${room.room_number} &bull; ${room.category}</strong>
-                                <span>$${room.price}/night</span>
+                                <span>₹${room.price}/night</span>
                             </div>
                             <a href="/booking/${room.id}/" class="ai-room-book-btn">Book &rarr;</a>
                         `;
@@ -325,7 +325,7 @@
                     })
                     .catch(err => {
                         typingDiv.remove();
-                        appendMessage("Aurora Haven rooms start from $129/night. Feel free to browse our Rooms section!", 'bot');
+                        appendMessage("Aurora Haven rooms start from ₹1,999/night. Feel free to browse our Rooms section!", 'bot');
                     });
                 }
             }

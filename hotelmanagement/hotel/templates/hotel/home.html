@@ -42,7 +42,7 @@
             <div class="hero-card-body">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                     <span class="hero-card-cat">{{ featured_rooms.0.category.name }}</span>
-                    <span class="hero-card-price">${{ featured_rooms.0.price }}<small>/night</small></span>
+                    <span class="hero-card-price">₹{{ featured_rooms.0.price }}<small>/night</small></span>
                 </div>
                 <h3 style="margin: 0 0 10px 0; color: #fff; font-size: 1.15rem;">Room {{ featured_rooms.0.room_number }}</h3>
                 <p style="margin: 0 0 16px 0; font-size: 0.85rem; color: #94a3b8; line-height: 1.5;">
@@ -136,8 +136,8 @@
 
         <div class="ai-matcher-form-grid">
             <div>
-                <label>Max Nightly Budget ($)</label>
-                <input type="number" id="matcherBudget" placeholder="e.g. 250" class="luxury-input">
+                <label>Max Nightly Budget (₹)</label>
+                <input type="number" id="matcherBudget" placeholder="e.g. 2500" class="luxury-input">
             </div>
             <div>
                 <label>Travel Vibe / Mood</label>
@@ -234,7 +234,7 @@
                     <div class="room-card-footer">
                         <div>
                             <small>Nightly Rate</small>
-                            <strong>${{ room.price }}</strong>
+                            <strong>₹{{ room.price }}</strong>
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <a class="btn-card-details" href="{% url 'room_detail' room.id %}">Details</a>
@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="ai-matched-footer">
                                     <div>
                                         <small style="color: #94a3b8; font-size: 11px;">Per Night</small>
-                                        <strong style="color: #34d399; font-size: 18px; display: block;">$${m.price}</strong>
+                                        <strong style="color: #34d399; font-size: 18px; display: block;">₹${m.price}</strong>
                                     </div>
                                     <a href="/booking/${m.id}/" class="btn-luxury-primary" style="padding: 8px 18px; font-size: 13px;">Book &rarr;</a>
                                 </div>
