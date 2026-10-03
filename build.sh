@@ -2,6 +2,9 @@
 # exit on error
 set -o errexit
 
+pip install --upgrade pip
+pip install -r requirements.txt
+
 cd hotelmanagement
 pip install -r requirements.txt
 python manage.py collectstatic --no-input

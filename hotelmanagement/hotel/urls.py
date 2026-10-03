@@ -34,5 +34,7 @@ urlpatterns = [
     path("portal/categories/", admin_views.admin_categories, name="admin_categories"),
     path("portal/categories/<int:category_id>/delete/", admin_views.admin_category_delete, name="admin_category_delete"),
     path("portal/guests/", admin_views.admin_guests, name="admin_guests"),
+    path("portal/staff/new/", admin_views.admin_staff_create, name="admin_staff_create"),
+    path("portal/users/<int:user_id>/toggle-staff/", admin_views.admin_user_toggle_staff, name="admin_user_toggle_staff"),
     path("portal/ai/", admin_views.admin_ai_view, name="admin_ai_view"),
 ]

@@ -307,8 +307,10 @@ def login_user(request):
             messages.error(request, "Invalid username or password.")
         else:
             login(request, user)
-            messages.success(request, "You are now logged in.")
+            messages.success(request, f"Welcome back, {user.first_name or user.username}!")
             next_page = request.GET.get("next") or request.POST.get("next")
+            if not next_page and (user.is_staff or user.is_superuser):
+                return redirect("admin_dashboard")
             return redirect(next_page or "home")
 
     context = {

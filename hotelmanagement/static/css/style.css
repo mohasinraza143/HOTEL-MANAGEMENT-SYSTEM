@@ -1027,6 +1027,27 @@ main {
     box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
 }
 
+.nav-staff-pill {
+    background: rgba(59, 130, 246, 0.12) !important;
+    border: 1px solid rgba(59, 130, 246, 0.35) !important;
+    color: #93c5fd !important;
+    border-radius: 999px !important;
+    padding: 7px 15px !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    transition: all 0.2s ease !important;
+}
+
+.nav-staff-pill:hover {
+    background: rgba(59, 130, 246, 0.25) !important;
+    border-color: #60a5fa !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
 /* Floating AI Concierge Launcher */
 .ai-launcher-btn {
     position: fixed;
@@ -2331,9 +2352,10 @@ main {
 
 /* Footer Bottom Bar with Mohasin Raza Signature */
 .footer-bottom-bar {
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 24px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 26px 0 32px 0;
     background: #03050a;
+    position: relative;
 }
 
 .footer-bottom-inner {
@@ -2341,8 +2363,9 @@ main {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 16px;
-    font-size: 0.85rem;
+    gap: 20px;
+    font-size: 0.88rem;
+    padding-right: 220px; /* Crucial: leaves dedicated clearance for floating AI button */
 }
 
 .footer-copy {
@@ -2355,20 +2378,74 @@ main {
 }
 
 .creator-badge {
-    background: rgba(212, 175, 55, 0.1);
-    border: 1px solid rgba(212, 175, 55, 0.25);
-    color: #cbd5e1;
-    padding: 6px 16px;
-    border-radius: 30px;
-    font-size: 0.82rem;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(99, 102, 241, 0.14));
+    border: 1.5px solid rgba(212, 175, 55, 0.5);
+    color: #e2e8f0;
+    padding: 8px 22px;
+    border-radius: 999px;
+    font-size: 0.88rem;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.creator-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px rgba(212, 175, 55, 0.35);
+    border-color: #ffd700;
 }
 
 .creator-badge strong {
-    color: #fef08a;
-    letter-spacing: 0.02em;
+    color: #ffd700;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.45);
+}
+
+.footer-staff-link {
+    color: #60a5fa;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s;
+}
+
+.footer-staff-link:hover {
+    color: #93c5fd;
+    text-decoration: underline;
+}
+
+/* Staff Login Helper Box */
+.staff-login-hint {
+    margin-top: 24px;
+    background: rgba(30, 58, 138, 0.15);
+    border: 1px dashed rgba(96, 165, 250, 0.4);
+    border-radius: 12px;
+    padding: 16px 20px;
+}
+
+.btn-demo-quickfill {
+    background: rgba(59, 130, 246, 0.25);
+    border: 1px solid #3b82f6;
+    color: #bfdbfe;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-demo-quickfill:hover {
+    background: #3b82f6;
+    color: #ffffff;
 }
 
 /* ==========================================================
@@ -2457,5 +2534,12 @@ main {
 @media (max-width: 900px) {
     .luxury-footer-inner {
         grid-template-columns: 1fr;
+    }
+    .footer-bottom-inner {
+        padding-right: 0 !important;
+        padding-bottom: 75px !important;
+        flex-direction: column !important;
+        text-align: center !important;
+        justify-content: center !important;
     }
 }

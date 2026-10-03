@@ -58,6 +58,9 @@
                 {% else %}
                     <a href="{% url 'login' %}">Login</a>
                     <a class="nav-highlight" href="{% url 'register' %}">Register</a>
+                    <a href="{% url 'admin_dashboard' %}" class="nav-staff-pill" title="Staff Executive Portal">
+                        <span>🔐</span> Staff Portal
+                    </a>
                 {% endif %}
 
                 <!-- Dark / Light Mode Toggle Button -->
@@ -162,9 +165,7 @@
                 <ul class="footer-nav">
                     <li><a href="{% url 'booking_history' %}">My Bookings & Receipts</a></li>
                     <li><a href="javascript:void(0)" onclick="document.getElementById('aiChatDrawer').classList.add('open')">24/7 AI Concierge</a></li>
-                    {% if request.user.is_staff or request.user.is_superuser %}
-                        <li><a href="{% url 'admin_dashboard' %}" style="color: #60a5fa; font-weight: 700;">⚙️ Staff Admin Portal</a></li>
-                    {% endif %}
+                    <li><a href="{% url 'admin_dashboard' %}" style="color: #60a5fa; font-weight: 700;">🔐 Staff Admin Portal</a></li>
                     <li><a href="{% url 'home' %}">Cancellation Policy</a></li>
                 </ul>
             </div>
@@ -192,6 +193,11 @@
                     <span class="creator-badge">
                         Designed & Developed with ❤️ by <strong>Mohasin Raza</strong>
                     </span>
+                </div>
+                <div class="footer-staff-quick">
+                    <a href="{% url 'admin_dashboard' %}" class="footer-staff-link">
+                        🔐 Staff Portal Access &rarr;
+                    </a>
                 </div>
             </div>
         </div>

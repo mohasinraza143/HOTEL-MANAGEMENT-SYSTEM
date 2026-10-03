@@ -295,3 +295,44 @@ def admin_ai_view(request):
         "hotel/admin/ai_insights.html",
         {"ai_insights": ai_insights, "room_performance": room_performance},
     )
+
+
+@login_required(login_url="login")
+@user_passes_test(staff_check, login_url="login")
+def admin_staff_create(request):
+    """Allow an admin to register new staff or superuser accounts."""
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        email = request.POST.get("email", "").strip()
+        password = request.POST.get("password", "")
+        role = request.POST.get("role", "staff")
+
+        if not username or not password:
+            messages.error(request, "Username and password are required.")
+        elif User.objects.filter(username=username).exists():
+            messages.error(request, f"User '{username}' already exists.")
+        else:
+            new_user = User.objects.create_user(username=username, email=email, password=password)
+            new_user.is_staff = True
+            if role == "superuser":
+                new_user.is_superuser = True
+            new_user.save()
+            messages.success(request, f"Staff account '{username}' registered successfully!")
+            return redirect("admin_guests")
+
+    return render(request, "hotel/admin/staff_form.html")
+
+
+@login_required(login_url="login")
+@user_passes_test(staff_check, login_url="login")
+def admin_user_toggle_staff(request, user_id):
+    """Promote or demote a user to/from staff status."""
+    target_user = get_object_or_404(User, id=user_id)
+    if target_user == request.user:
+        messages.error(request, "You cannot alter your own staff status.")
+    else:
+        target_user.is_staff = not target_user.is_staff
+        target_user.save()
+        status_text = "promoted to Staff" if target_user.is_staff else "demoted from Staff"
+        messages.success(request, f"User '{target_user.username}' {status_text}.")
+    return redirect("admin_guests")
