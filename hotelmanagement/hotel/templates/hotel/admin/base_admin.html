@@ -364,10 +364,46 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body class="admin-body">
+    <!-- Luxury Animated Toast Notification Popup Container -->
+    <div id="toastContainer" class="toast-popup-container" aria-live="polite">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="luxury-toast toast-{{ message.tags }}" role="alert">
+                    <div class="toast-icon">
+                        {% if 'success' in message.tags %}✅
+                        {% elif 'error' in message.tags or 'danger' in message.tags %}❌
+                        {% elif 'warning' in message.tags %}⚠️
+                        {% else %}ℹ️{% endif %}
+                    </div>
+                    <div class="toast-body">
+                        <strong class="toast-title">
+                            {% if 'success' in message.tags %}
+                                {% if 'Login' in message.message or 'Welcome' in message.message %}Admin Login Successful
+                                {% elif 'registered' in message.message|lower or 'account' in message.message|lower %}Account Created
+                                {% elif 'deleted' in message.message|lower %}Record Deleted
+                                {% elif 'updated' in message.message|lower or 'status' in message.message|lower %}Updated Successfully
+                                {% else %}Action Successful{% endif %}
+                            {% elif 'error' in message.tags or 'danger' in message.tags %}
+                                {% if 'password' in message.message|lower or 'username' in message.message|lower or 'credentials' in message.message|lower %}Authentication Error
+                                {% else %}Action Error{% endif %}
+                            {% elif 'warning' in message.tags %}Attention
+                            {% else %}Staff Notification{% endif %}
+                        </strong>
+                        <p class="toast-text">{{ message }}</p>
+                    </div>
+                    <button type="button" class="toast-close" onclick="dismissToast(this.closest('.luxury-toast'))" aria-label="Dismiss Notification">&times;</button>
+                    <div class="toast-timer"></div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
     <!-- Sidebar -->
     <aside class="admin-sidebar">
         <a href="{% url 'admin_dashboard' %}" class="admin-brand">
-            <div class="admin-brand-icon">AH</div>
+            <div class="brand-logo-wrap admin-logo-wrap">
+                <img src="{% static 'images/aurora_haven_logo.svg' %}" alt="Aurora Haven Admin Logo" class="brand-logo-img">
+            </div>
             <div>
                 <strong style="display:block; font-size:15px; color:#fff;">Aurora Haven</strong>
                 <small style="font-size:11px; color:#3b82f6; font-weight:700; text-transform:uppercase;">Admin Portal</small>
@@ -376,28 +412,40 @@
 
         <nav class="admin-nav">
             <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
-                <span>📊</span> <span>Dashboard</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                <span>Dashboard</span>
             </a>
             <a href="{% url 'admin_rooms' %}" class="{% if 'rooms' in request.resolver_match.url_name %}active{% endif %}">
-                <span>🛏️</span> <span>Manage Rooms</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"></path></svg>
+                <span>Manage Rooms</span>
             </a>
             <a href="{% url 'admin_bookings' %}" class="{% if 'bookings' in request.resolver_match.url_name %}active{% endif %}">
-                <span>📅</span> <span>All Bookings</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>All Bookings</span>
             </a>
             <a href="{% url 'admin_categories' %}" class="{% if 'categories' in request.resolver_match.url_name %}active{% endif %}">
-                <span>🏷️</span> <span>Categories</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                <span>Categories</span>
             </a>
             <a href="{% url 'admin_guests' %}" class="{% if 'guests' in request.resolver_match.url_name %}active{% endif %}">
-                <span>👥</span> <span>Guest Directory</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <span>Guest Directory</span>
             </a>
             <a href="{% url 'admin_ai_view' %}" class="ai-tab {% if request.resolver_match.url_name == 'admin_ai_view' %}active{% endif %}">
-                <span>✨</span> <span>AI Intelligence</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>AI Intelligence</span>
             </a>
         </nav>
 
         <div class="sidebar-footer">
-            <a href="{% url 'home' %}" target="_blank">🌐 <span>View Guest Website</span></a>
-            <a href="{% url 'logout' %}">🚪 <span>Logout</span></a>
+            <a href="{% url 'home' %}" target="_blank">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span>View Guest Website</span>
+            </a>
+            <a href="{% url 'logout' %}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span>Logout</span>
+            </a>
         </div>
     </aside>
 
@@ -414,20 +462,51 @@
         </header>
 
         <div class="admin-content">
-            {% if messages %}
-                <div style="margin-bottom:20px;">
-                    {% for message in messages %}
-                        <div style="padding:12px 18px; border-radius:10px; margin-bottom:10px; font-size:14px; 
-                            {% if message.tags == 'error' %}background:rgba(239, 68, 68, 0.2); color:#fca5a5; border:1px solid rgba(239,68,68,0.4);
-                            {% else %}background:rgba(16, 185, 129, 0.2); color:#6ee7b7; border:1px solid rgba(16,185,129,0.4);{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
             {% block admin_content %}{% endblock %}
         </div>
     </main>
+
+    <!-- Toast Notification & Admin Scripts -->
+    <script>
+        function dismissToast(el) {
+            if (!el) return;
+            el.classList.add('toast-fade-out');
+            setTimeout(function() {
+                if (el && el.parentNode) {
+                    el.remove();
+                }
+            }, 380);
+        }
+
+        window.showLuxuryToast = function(type, title, message) {
+            var container = document.getElementById('toastContainer');
+            if (!container) return;
+            var toast = document.createElement('div');
+            toast.className = 'luxury-toast toast-' + type;
+            toast.setAttribute('role', 'alert');
+            var icon = type === 'success' ? '✅' : ((type === 'error' || type === 'danger') ? '❌' : (type === 'warning' ? '⚠️' : 'ℹ️'));
+            toast.innerHTML = 
+                '<div class="toast-icon">' + icon + '</div>' +
+                '<div class="toast-body">' +
+                    '<strong class="toast-title">' + title + '</strong>' +
+                    '<p class="toast-text">' + message + '</p>' +
+                '</div>' +
+                '<button type="button" class="toast-close" onclick="dismissToast(this.closest(\'.luxury-toast\'))" aria-label="Dismiss">&times;</button>' +
+                '<div class="toast-timer"></div>';
+            container.appendChild(toast);
+            setTimeout(function() {
+                dismissToast(toast);
+            }, 4500);
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var initialToasts = document.querySelectorAll('.luxury-toast');
+            initialToasts.forEach(function(toast) {
+                setTimeout(function() {
+                    dismissToast(toast);
+                }, 4500);
+            });
+        });
+    </script>
 </body>
 </html>

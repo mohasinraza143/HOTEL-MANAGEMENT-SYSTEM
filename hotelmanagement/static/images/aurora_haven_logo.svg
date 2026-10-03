@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%" aria-label="Aurora Haven Luxury Hotel Crest">
+    <defs>
+        <!-- Luxury Gold Gradient -->
+        <linearGradient id="ahGold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FFF3B0"/>
+            <stop offset="25%" stop-color="#F3D17A"/>
+            <stop offset="55%" stop-color="#D4AF37"/>
+            <stop offset="85%" stop-color="#B8860B"/>
+            <stop offset="100%" stop-color="#8B6508"/>
+        </linearGradient>
+
+        <!-- Deep Royal Sapphire Crest Gradient -->
+        <linearGradient id="ahCrestBg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#111827"/>
+            <stop offset="50%" stop-color="#0B0F19"/>
+            <stop offset="100%" stop-color="#1E1B4B"/>
+        </linearGradient>
+
+        <!-- Subtle Aurora Light Beam -->
+        <linearGradient id="ahAuroraBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.3"/>
+            <stop offset="50%" stop-color="#818CF8" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="#C084FC" stop-opacity="0.3"/>
+        </linearGradient>
+
+        <!-- Drop Shadow Filter -->
+        <filter id="ahShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.5"/>
+        </filter>
+        <filter id="ahGoldGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#D4AF37" flood-opacity="0.6"/>
+        </filter>
+    </defs>
+
+    <!-- Outer Squircle Crest Base -->
+    <rect x="8" y="8" width="104" height="104" rx="28" fill="url(#ahCrestBg)" stroke="url(#ahGold)" stroke-width="2.5" filter="url(#ahShadow)"/>
+
+    <!-- Subtle Inner Border -->
+    <rect x="14" y="14" width="92" height="92" rx="22" fill="none" stroke="url(#ahAuroraBeam)" stroke-width="1.2" stroke-dasharray="4 2"/>
+
+    <!-- Radiant 8-Pointed Aurora Haven Star at the Crown -->
+    <g filter="url(#ahGoldGlow)">
+        <!-- Vertical & Horizontal Star Diamond -->
+        <path d="M 60 21 L 63 31 L 73 34 L 63 37 L 60 47 L 57 37 L 47 34 L 57 31 Z" fill="url(#ahGold)"/>
+        <!-- Diagonal Star Diamond -->
+        <path d="M 60 27 L 62.5 32 L 67 34 L 62.5 36 L 60 41 L 57.5 36 L 53 34 L 57.5 32 Z" fill="#FFF3B0"/>
+    </g>
+
+    <!-- Architectural Palace Archway (Grand Haven Portal) -->
+    <path d="M 34 88 L 34 58 C 34 44 45 42 60 42 C 75 42 86 44 86 58 L 86 88" 
+          fill="none" stroke="url(#ahGold)" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Stylized Geometric Interlocking Monogram Emblem (A & H in Grand Serif Proportions) -->
+    <!-- Central Apex & Left/Right Slopes of "A" -->
+    <path d="M 60 46 L 42 86" stroke="url(#ahGold)" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M 60 46 L 78 86" stroke="url(#ahGold)" stroke-width="3.5" stroke-linecap="round"/>
+
+    <!-- Horizontal Crossbar of "A" and "H" Bridge -->
+    <path d="M 46 70 L 74 70" stroke="url(#ahGold)" stroke-width="3.2" stroke-linecap="round"/>
+
+    <!-- Left Pillar of "H" -->
+    <path d="M 40 56 L 40 86" stroke="url(#ahGold)" stroke-width="3.2" stroke-linecap="round"/>
+
+    <!-- Right Pillar of "H" -->
+    <path d="M 80 56 L 80 86" stroke="url(#ahGold)" stroke-width="3.2" stroke-linecap="round"/>
+
+    <!-- Center Gem Diamond -->
+    <polygon points="60,65 63.5,70 60,75 56.5,70" fill="#FFF3B0"/>
+
+    <!-- Luxury Five Star Accents at the Pedestal -->
+    <g fill="url(#ahGold)" transform="translate(0, 4)">
+        <polygon points="40,94 41,96.5 43.5,96.5 41.5,98 42,100.5 40,99 38,100.5 38.5,98 36.5,96.5 39,96.5" transform="scale(0.8) translate(10, 0)"/>
+        <polygon points="50,94 51,96.5 53.5,96.5 51.5,98 52,100.5 50,99 48,100.5 48.5,98 46.5,96.5 49,96.5" transform="scale(0.85) translate(9, -2)"/>
+        <polygon points="60,94 61,96.5 63.5,96.5 61.5,98 62,100.5 60,99 58,100.5 58.5,98 56.5,96.5 59,96.5" transform="scale(1) translate(0, -4)"/>
+        <polygon points="70,94 71,96.5 73.5,96.5 71.5,98 72,100.5 70,99 68,100.5 68.5,98 66.5,96.5 69,96.5" transform="scale(0.85) translate(13, -2)"/>
+        <polygon points="80,94 81,96.5 83.5,96.5 81.5,98 82,100.5 80,99 78,100.5 78.5,98 76.5,96.5 79,96.5" transform="scale(0.8) translate(20, 0)"/>
+    </g>
+</svg>

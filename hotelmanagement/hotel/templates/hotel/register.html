@@ -7,47 +7,52 @@
     <div class="luxury-auth-card auth-card-wide" style="max-width: 680px;">
         <div class="auth-header">
             <div class="auth-icon-badge">✨</div>
-            <span class="luxury-kicker">Join Aurora Haven</span>
+            <span class="luxury-kicker">Guest Membership</span>
             <h1 class="auth-title">Create Guest Account</h1>
             <p class="auth-subtitle">Register once to book handcrafted suites, view instant confirmations, and unlock priority AI concierge assistance.</p>
+        </div>
+
+        <div class="auth-role-callout" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.22); border-radius: 14px; padding: 12px 18px; margin-bottom: 24px; font-size: 0.85rem;">
+            <span>🛡️ Hotel Staff or Administrator? Staff accounts are created internally.</span>
+            <a href="{% url 'login' %}?role=admin" class="luxury-text-link" style="white-space: nowrap; font-weight: 700;">Admin Sign In &rarr;</a>
         </div>
 
         <form method="post" class="luxury-form">
             {% csrf_token %}
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px;">
                 <div class="form-group">
-                    <label for="first_name" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">First name *</label>
+                    <label for="first_name" class="auth-label">First name *</label>
                     <input id="first_name" type="text" name="first_name" value="{{ form_data.first_name }}" placeholder="e.g. Alexander" class="luxury-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="last_name" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Last name *</label>
+                    <label for="last_name" class="auth-label">Last name *</label>
                     <input id="last_name" type="text" name="last_name" value="{{ form_data.last_name }}" placeholder="e.g. Vance" class="luxury-input" required>
                 </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px;">
                 <div class="form-group">
-                    <label for="username" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Username *</label>
+                    <label for="username" class="auth-label">Username *</label>
                     <input id="username" type="text" name="username" value="{{ form_data.username }}" placeholder="Choose a username" class="luxury-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="phone" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Phone number *</label>
+                    <label for="phone" class="auth-label">Phone number *</label>
                     <input id="phone" type="text" name="phone" value="{{ form_data.phone }}" placeholder="+1 (555) 000-0000" class="luxury-input" required>
                 </div>
             </div>
 
             <div class="form-group" style="margin-bottom: 18px;">
-                <label for="email" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Email address *</label>
+                <label for="email" class="auth-label">Email address *</label>
                 <input id="email" type="email" name="email" value="{{ form_data.email }}" placeholder="alexander@example.com" class="luxury-input" required>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px;">
                 <div class="form-group">
-                    <label for="password" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Password *</label>
+                    <label for="password" class="auth-label">Password *</label>
                     <input id="password" type="password" name="password" placeholder="Create strong password" class="luxury-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="confirm_password" style="display: block; font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Confirm password *</label>
+                    <label for="confirm_password" class="auth-label">Confirm password *</label>
                     <input id="confirm_password" type="password" name="confirm_password" placeholder="Repeat password" class="luxury-input" required>
                 </div>
             </div>
@@ -58,9 +63,32 @@
         </form>
 
         <div class="auth-footer-switch">
-            <span>Already registered?</span>
+            <span>Already registered as a guest?</span>
             <a href="{% url 'login' %}" class="luxury-text-link">Sign in to your account &rarr;</a>
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var registerForm = document.querySelector('form.luxury-form');
+        if (registerForm) {
+            registerForm.addEventListener('submit', function(e) {
+                var p1 = document.getElementById('password');
+                var p2 = document.getElementById('confirm_password');
+                if (p1 && p2 && p1.value && p2.value && p1.value !== p2.value) {
+                    e.preventDefault();
+                    if (window.showLuxuryToast) {
+                        window.showLuxuryToast('error', 'Authentication Error', 'Password and confirm password do not match.');
+                    }
+                    p2.classList.add('input-error-shake');
+                    p2.focus();
+                    setTimeout(function() {
+                        p2.classList.remove('input-error-shake');
+                    }, 800);
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

@@ -280,7 +280,7 @@ def register_user(request):
             full_name = f"{form_data['first_name']} {form_data['last_name']}".strip() or form_data["username"]
             Guest.objects.create(user=user, name=full_name, phone=form_data["phone"])
             login(request, user)
-            messages.success(request, "Your account has been created successfully.")
+            messages.success(request, f"Registration Successful! Welcome to Aurora Haven, {user.first_name or user.username}.")
             return redirect("home")
 
     context = {
@@ -292,7 +292,14 @@ def register_user(request):
 
 def login_user(request):
     if request.user.is_authenticated:
+        if request.user.is_staff or request.user.is_superuser:
+            return redirect("admin_dashboard")
         return redirect("home")
+
+    role_requested = request.GET.get("role", "") or request.POST.get("role", "")
+    next_page = request.GET.get("next") or request.POST.get("next") or ""
+    if role_requested == "admin" and not next_page:
+        next_page = "/portal/"
 
     form_data = {
         "username": "",
@@ -301,29 +308,36 @@ def login_user(request):
     if request.method == "POST":
         form_data["username"] = request.POST.get("username", "").strip()
         password = request.POST.get("password", "")
+        role_requested = request.POST.get("role", role_requested)
         user = authenticate(request, username=form_data["username"], password=password)
 
         if user is None:
-            messages.error(request, "Invalid username or password.")
+            messages.error(request, "Incorrect username or password. Please verify your credentials and try again.")
         else:
             login(request, user)
-            messages.success(request, f"Welcome back, {user.first_name or user.username}!")
-            next_page = request.GET.get("next") or request.POST.get("next")
-            if not next_page and (user.is_staff or user.is_superuser):
-                return redirect("admin_dashboard")
-            return redirect(next_page or "home")
+            is_staff_user = user.is_staff or user.is_superuser
+            role_text = "Staff Administrator" if is_staff_user else "Guest"
+            messages.success(request, f"Login Successful! Welcome back, {user.first_name or user.username} ({role_text}).")
+
+            if is_staff_user:
+                return redirect(next_page if (next_page and next_page != "/") else "admin_dashboard")
+            else:
+                if next_page and "/portal/" in next_page:
+                    return redirect("home")
+                return redirect(next_page or "home")
 
     context = {
         **get_base_context(),
         "form_data": form_data,
-        "next": request.GET.get("next", ""),
+        "next": next_page,
+        "role": role_requested,
     }
     return render(request, "hotel/login.html", context)
 
 
 def logout_user(request):
     logout(request)
-    messages.success(request, "You have been logged out.")
+    messages.success(request, "You have been logged out successfully.")
     return redirect("home")
 
 

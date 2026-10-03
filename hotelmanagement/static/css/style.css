@@ -134,6 +134,37 @@ select {
     box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
 }
 
+.brand-logo-wrap {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    position: relative;
+    transition: transform 0.25s ease, filter 0.25s ease;
+    flex-shrink: 0;
+}
+
+.brand-logo-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.4));
+}
+
+.brand:hover .brand-logo-wrap,
+.admin-brand:hover .brand-logo-wrap {
+    transform: translateY(-2px) scale(1.06);
+    filter: drop-shadow(0 6px 18px rgba(212, 175, 55, 0.65));
+}
+
+.admin-logo-wrap {
+    width: 42px;
+    height: 42px;
+}
+
 
 .nav-links {
     display: flex;
@@ -2170,6 +2201,67 @@ main {
    LUXURY AUTHENTICATION CARDS (Login & Register)
    ========================================================== */
 
+/* Dual Role Switcher Tabs (Guest vs Admin) */
+.auth-role-tabs {
+    display: flex;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 5px;
+    margin-bottom: 28px;
+    gap: 6px;
+}
+
+.auth-role-tab {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.auth-role-tab:hover {
+    color: #f1f5f9;
+}
+
+.auth-role-tab.active {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.28), rgba(59, 130, 246, 0.28));
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.auth-role-tab .tab-icon {
+    font-size: 1.05rem;
+}
+
+.auth-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.auth-role-callout {
+    color: #cbd5e1;
+}
+
+.admin-notice-text {
+    color: #cbd5e1;
+}
+
 .luxury-auth-card {
     max-width: 480px;
     margin: 40px auto;
@@ -2510,28 +2602,57 @@ main {
 }
 
 /* ==========================================================
-   LIGHT MODE THEME OVERRIDES (Triggered by data-theme="light")
+   LIGHT MODE THEME COMPREHENSIVE OVERRIDES (data-theme="light")
    ========================================================== */
 
 [data-theme="light"] {
     --bg: #f8fafc;
     --surface: #ffffff;
+    --surface-soft: #f1f5f9;
+    --surface-muted: #e2e8f0;
     --text: #0f172a;
-    --muted: #64748b;
-    --border: #e2e8f0;
+    --muted: #475569;
+    --border: #cbd5e1;
 }
 
-[data-theme="light"] body {
-    background-color: #f6f8fc !important;
+[data-theme="light"] body:not(.admin-body) {
+    background-color: #f8fafc !important;
     background-image: 
-        radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 90% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 35%) !important;
+        radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(212, 175, 55, 0.04) 0%, transparent 35%),
+        radial-gradient(circle at 50% 80%, rgba(124, 58, 237, 0.03) 0%, transparent 45%) !important;
     color: #0f172a !important;
 }
 
+/* Base Headings & High Contrast Text in Light Mode */
+[data-theme="light"] h1:not(.admin-body *),
+[data-theme="light"] h2:not(.admin-body *),
+[data-theme="light"] h3:not(.admin-body *),
+[data-theme="light"] h4:not(.admin-body *),
+[data-theme="light"] h5:not(.admin-body *),
+[data-theme="light"] strong:not(.nav-admin-badge strong):not(.brand-mark):not(.badge):not(.admin-body *):not(.social-btn *) {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] p:not(.admin-body *),
+[data-theme="light"] span:not(.brand-mark):not(.room-badge-avail):not(.badge):not(.rating-stars):not(.creator-badge):not(.social-label):not(.ai-pulse-dot):not(.admin-body *):not(.tab-icon):not(.social-btn *):not(.gradient-text) {
+    color: #334155;
+}
+
+/* Header & Navigation in Light Mode */
 [data-theme="light"] .site-header {
-    background: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(255, 255, 255, 0.96) !important;
     border-bottom: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="light"] .top-strip {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    color: #2563eb !important;
+}
+[data-theme="light"] .top-strip-inner span {
+    color: #2563eb !important;
 }
 
 [data-theme="light"] .brand strong {
@@ -2540,11 +2661,17 @@ main {
 
 [data-theme="light"] .nav-links a {
     color: #334155 !important;
+    font-weight: 600;
 }
 
 [data-theme="light"] .nav-links a:hover {
     background: #f1f5f9 !important;
     color: #0f172a !important;
+}
+
+[data-theme="light"] .nav-user {
+    color: #475569 !important;
+    font-weight: 600;
 }
 
 [data-theme="light"] .theme-toggle-btn {
@@ -2553,43 +2680,427 @@ main {
     color: #0f172a !important;
 }
 
+/* Hero Section in Light Mode */
+[data-theme="light"] .luxury-hero-title {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .luxury-hero-subtitle {
+    color: #475569 !important;
+}
+
+[data-theme="light"] .btn-luxury-glass {
+    background: #ffffff !important;
+    border: 1.5px solid #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="light"] .btn-luxury-glass:hover {
+    background: #f1f5f9 !important;
+    border-color: #94a3b8 !important;
+    color: #000000 !important;
+}
+
+[data-theme="light"] .luxury-social-proof {
+    border-top-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] .luxury-social-proof strong {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .luxury-social-proof span {
+    color: #64748b !important;
+}
+
+/* Cards & Surfaces in Light Mode */
 [data-theme="light"] .pillar-card,
 [data-theme="light"] .luxury-category-card,
 [data-theme="light"] .luxury-room-card,
 [data-theme="light"] .testimonial-card,
-[data-theme="light"] .luxury-auth-card {
+[data-theme="light"] .luxury-auth-card,
+[data-theme="light"] .booking-card,
+[data-theme="light"] .room-detail-card,
+[data-theme="light"] .history-card {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
     color: #0f172a !important;
 }
 
-[data-theme="light"] .room-card-title,
-[data-theme="light"] .section-main-title,
 [data-theme="light"] .pillar-card h4,
 [data-theme="light"] .luxury-category-card h3,
-[data-theme="light"] .testi-author strong,
+[data-theme="light"] .room-card-title,
+[data-theme="light"] .section-main-title,
 [data-theme="light"] .auth-title {
     color: #0f172a !important;
 }
 
+[data-theme="light"] .pillar-card p,
+[data-theme="light"] .luxury-category-card p,
+[data-theme="light"] .room-card-desc,
+[data-theme="light"] .auth-subtitle {
+    color: #475569 !important;
+}
+
+[data-theme="light"] .room-amenity-tags span {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #334155 !important;
+}
+
+[data-theme="light"] .room-card-footer {
+    border-top-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] .room-card-footer small {
+    color: #64748b !important;
+}
+
+[data-theme="light"] .cat-count-badge {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+}
+
+/* Search Dock & Inputs in Light Mode */
 [data-theme="light"] .luxury-search-dock {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06) !important;
 }
 
 [data-theme="light"] .search-input-col input,
 [data-theme="light"] .search-input-col select,
 [data-theme="light"] .luxury-input,
-[data-theme="light"] .luxury-select {
+[data-theme="light"] .luxury-select,
+[data-theme="light"] .form-control {
+    background: #ffffff !important;
+    border: 1.5px solid #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .luxury-input::placeholder,
+[data-theme="light"] .search-input-col input::placeholder {
+    color: #94a3b8 !important;
+}
+
+[data-theme="light"] .search-input-col label,
+[data-theme="light"] .auth-label,
+[data-theme="light"] .form-group label,
+[data-theme="light"] label {
+    color: #334155 !important;
+}
+
+/* Auth Cards & Role Switcher in Light Mode */
+[data-theme="light"] .auth-role-tabs {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .auth-role-tab {
+    color: #64748b !important;
+}
+
+[data-theme="light"] .auth-role-tab.active {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .auth-icon-badge {
     background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+}
+
+[data-theme="light"] .auth-footer-switch {
+    border-top-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] .auth-footer-switch span {
+    color: #475569 !important;
+}
+
+[data-theme="light"] .auth-admin-notice div {
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
+}
+
+[data-theme="light"] .admin-notice-text {
+    color: #1e3a8a !important;
+}
+
+[data-theme="light"] .auth-role-callout {
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
+}
+[data-theme="light"] .auth-role-callout span {
+    color: #1e3a8a !important;
+}
+
+/* AI Concierge Drawer in Light Mode */
+[data-theme="light"] .ai-chat-drawer {
+    background: #ffffff !important;
+    border-left: 1px solid #e2e8f0 !important;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .ai-chat-header {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .ai-header-text strong {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .ai-msg.bot {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .ai-chip {
+    background: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #334155 !important;
+}
+
+[data-theme="light"] .ai-chip:hover {
+    background: #ede9fe !important;
+    color: #6d28d9 !important;
+    border-color: #a78bfa !important;
+}
+
+[data-theme="light"] .ai-room-card {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .ai-room-info strong {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .ai-chat-input-bar {
+    background: #f8fafc !important;
+    border-top: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .ai-chat-input {
+    background: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
     color: #0f172a !important;
 }
 
+/* Comprehensive Catch-all for any inline white styles */
+[data-theme="light"] [style*="color: #fff"]:not(.social-btn *):not(.nav-admin-badge *):not(.btn-primary *):not(.room-badge-avail *),
+[data-theme="light"] [style*="color:#fff"]:not(.social-btn *):not(.nav-admin-badge *):not(.btn-primary *):not(.room-badge-avail *),
+[data-theme="light"] [style*="color: #ffffff"]:not(.social-btn *):not(.nav-admin-badge *):not(.btn-primary *):not(.room-badge-avail *),
+[data-theme="light"] [style*="color:#ffffff"]:not(.social-btn *):not(.nav-admin-badge *):not(.btn-primary *):not(.room-badge-avail *) {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] [style*="color: #cbd5e1"],
+[data-theme="light"] [style*="color:#cbd5e1"],
+[data-theme="light"] [style*="color: #e2e8f0"],
+[data-theme="light"] [style*="color:#e2e8f0"] {
+    color: #334155 !important;
+}
+
+[data-theme="light"] [style*="color: #94a3b8"],
+[data-theme="light"] [style*="color:#94a3b8"] {
+    color: #64748b !important;
+}
+
+/* Footer remains deep luxury navy */
 [data-theme="light"] .luxury-footer {
-    background: #0f172a !important;
+    background: #0b0f19 !important;
+}
+
+/* ==========================================================
+   Luxury Floating Toast / Popup Notification System
+   ========================================================== */
+.toast-popup-container {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 92%;
+    max-width: 480px;
+    pointer-events: none;
+}
+
+.luxury-toast {
+    pointer-events: auto;
+    width: 100%;
+    background: rgba(11, 15, 25, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+    animation: toastSlideDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+}
+
+@keyframes toastSlideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.92);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.luxury-toast.toast-fade-out {
+    opacity: 0 !important;
+    transform: translateY(-20px) scale(0.95) !important;
+}
+
+/* Success Toast */
+.luxury-toast.toast-success {
+    border: 1.5px solid rgba(52, 211, 153, 0.65);
+    box-shadow: 0 14px 40px rgba(16, 185, 129, 0.35), 0 0 25px rgba(52, 211, 153, 0.2);
+}
+.luxury-toast.toast-success .toast-title {
+    color: #34d399;
+}
+.luxury-toast.toast-success .toast-timer {
+    background: linear-gradient(90deg, #34d399, #10b981);
+}
+
+/* Error / Wrong Password Toast with Shake Effect */
+.luxury-toast.toast-error,
+.luxury-toast.toast-danger {
+    border: 1.5px solid rgba(248, 113, 113, 0.75);
+    box-shadow: 0 14px 40px rgba(239, 68, 68, 0.4), 0 0 30px rgba(248, 113, 113, 0.25);
+    animation: toastSlideDown 0.35s ease, toastShake 0.5s 0.35s ease-in-out;
+}
+.luxury-toast.toast-error .toast-title,
+.luxury-toast.toast-danger .toast-title {
+    color: #f87171;
+}
+.luxury-toast.toast-error .toast-timer,
+.luxury-toast.toast-danger .toast-timer {
+    background: linear-gradient(90deg, #f87171, #ef4444);
+}
+
+@keyframes toastShake {
+    0%, 100% { transform: translateX(0); }
+    15% { transform: translateX(-8px); }
+    30% { transform: translateX(7px); }
+    45% { transform: translateX(-5px); }
+    60% { transform: translateX(4px); }
+    75% { transform: translateX(-2px); }
+}
+
+/* Warning Toast */
+.luxury-toast.toast-warning {
+    border: 1.5px solid rgba(245, 158, 11, 0.65);
+    box-shadow: 0 14px 40px rgba(245, 158, 11, 0.35);
+}
+.luxury-toast.toast-warning .toast-title {
+    color: #fbbf24;
+}
+.luxury-toast.toast-warning .toast-timer {
+    background: #f59e0b;
+}
+
+/* Info Toast */
+.luxury-toast.toast-info {
+    border: 1.5px solid rgba(96, 165, 250, 0.65);
+    box-shadow: 0 14px 40px rgba(59, 130, 246, 0.35);
+}
+.luxury-toast.toast-info .toast-title {
+    color: #60a5fa;
+}
+.luxury-toast.toast-info .toast-timer {
+    background: #3b82f6;
+}
+
+.toast-icon {
+    font-size: 24px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.toast-body {
+    flex: 1;
+}
+
+.toast-title {
+    display: block;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-bottom: 3px;
+}
+
+.toast-text {
+    margin: 0;
+    color: #e2e8f0;
+    font-size: 13.5px;
+    line-height: 1.45;
+}
+
+.toast-close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+}
+
+.toast-close:hover {
+    color: #ffffff;
+    transform: scale(1.15);
+}
+
+.toast-timer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3.5px;
+    width: 100%;
+    animation: toastCountdown 4.5s linear forwards;
+}
+
+@keyframes toastCountdown {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+/* Authentication Input Shake Effect */
+.input-error-shake {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+    animation: inputShake 0.4s ease;
+}
+
+@keyframes inputShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
 }
 
 @media (max-width: 900px) {

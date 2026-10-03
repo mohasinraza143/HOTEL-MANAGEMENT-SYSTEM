@@ -1,42 +1,154 @@
 {% extends 'hotel/base.html' %}
 
-{% block title %}Aurora Haven | Account Login{% endblock %}
+{% block title %}Aurora Haven | {% if role == 'admin' %}Staff & Admin Login{% else %}Guest Login{% endif %}{% endblock %}
 
 {% block content %}
 <section class="container auth-page section-space">
     <div class="luxury-auth-card">
-        <div class="auth-header">
-            <div class="auth-icon-badge">🔐</div>
-            <span class="luxury-kicker">Welcome Back</span>
+        <!-- Dual Role Switcher Tabs (Guest vs Admin) -->
+        <div class="auth-role-tabs" role="tablist" aria-label="Login Role Selection">
+            <button type="button" class="auth-role-tab {% if role != 'admin' %}active{% endif %}" id="tabGuest" onclick="switchLoginRole('guest')" role="tab" aria-selected="{% if role != 'admin' %}true{% else %}false{% endif %}">
+                <span class="tab-icon">👤</span>
+                <span>Guest Login</span>
+            </button>
+            <button type="button" class="auth-role-tab {% if role == 'admin' %}active{% endif %}" id="tabAdmin" onclick="switchLoginRole('admin')" role="tab" aria-selected="{% if role == 'admin' %}true{% else %}false{% endif %}">
+                <span class="tab-icon">⚙️</span>
+                <span>Staff & Admin</span>
+            </button>
+        </div>
+
+        <!-- Guest Header State -->
+        <div class="auth-header" id="guestHeader" style="{% if role == 'admin' %}display: none;{% endif %}">
+            <div class="auth-icon-badge">✨</div>
+            <span class="luxury-kicker">Guest Portal</span>
             <h1 class="auth-title">Sign In to Your Account</h1>
             <p class="auth-subtitle">
-                Access your hotel reservations, track stay status, or manage hotel operations with your authorized account.
+                Access your room bookings, view live confirmation receipts, and unlock personalized AI concierge assistance.
             </p>
         </div>
 
-        <form method="post" class="luxury-form">
+        <!-- Admin Header State -->
+        <div class="auth-header" id="adminHeader" style="{% if role != 'admin' %}display: none;{% endif %}">
+            <div class="auth-icon-badge" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(212, 175, 55, 0.25)); border-color: rgba(59, 130, 246, 0.5);">🛡️</div>
+            <span class="luxury-kicker" style="color: #60a5fa;">Internal Operations</span>
+            <h1 class="auth-title">Staff & Admin Portal</h1>
+            <p class="auth-subtitle">
+                Authorized management access for room inventory control, guest check-ins, rate adjustments, and hotel analytics.
+            </p>
+        </div>
+
+        <form method="post" class="luxury-form" id="loginForm">
             {% csrf_token %}
-            <input type="hidden" name="next" value="{{ next }}">
+            <input type="hidden" name="next" id="nextInput" value="{% if role == 'admin' %}/portal/{% else %}{{ next }}{% endif %}">
+            <input type="hidden" name="role" id="roleInput" value="{{ role|default:'guest' }}">
             
             <div class="form-group" style="margin-bottom: 20px;">
-                <label for="username" style="display: block; font-size: 0.82rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Username</label>
-                <input id="username" type="text" name="username" value="{{ form_data.username }}" placeholder="Enter your username" class="luxury-input" required autofocus autocomplete="username">
+                <label for="username" id="usernameLabel" class="auth-label">
+                    {% if role == 'admin' %}Admin / Staff Username{% else %}Username{% endif %}
+                </label>
+                <input id="username" type="text" name="username" value="{{ form_data.username }}" placeholder="{% if role == 'admin' %}e.g. admin{% else %}Enter your username{% endif %}" class="luxury-input" required autofocus autocomplete="username">
             </div>
 
             <div class="form-group" style="margin-bottom: 24px;">
-                <label for="password" style="display: block; font-size: 0.82rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Password</label>
+                <label for="password" id="passwordLabel" class="auth-label">Password</label>
                 <input id="password" type="password" name="password" placeholder="Enter your password" class="luxury-input" required autocomplete="current-password">
             </div>
 
-            <button class="btn-luxury-primary" type="submit" style="width: 100%; height: 50px; font-size: 1rem;">
-                Sign In &rarr;
+            <button class="btn-luxury-primary" id="loginSubmitBtn" type="submit" style="width: 100%; height: 50px; font-size: 1rem;">
+                {% if role == 'admin' %}Access Staff Portal &rarr;{% else %}Sign In as Guest &rarr;{% endif %}
             </button>
         </form>
 
-        <div class="auth-footer-switch" style="margin-top: 24px;">
+        <!-- Guest Footer Switch -->
+        <div class="auth-footer-switch" id="guestFooterSwitch" style="{% if role == 'admin' %}display: none;{% endif %}">
             <span>New guest at Aurora Haven?</span>
             <a href="{% url 'register' %}" class="luxury-text-link">Create an account &rarr;</a>
         </div>
+
+        <!-- Admin Footer Info Notice -->
+        <div class="auth-admin-notice" id="adminNotice" style="{% if role != 'admin' %}display: none;{% endif %}; margin-top: 24px;">
+            <div style="display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.22); border-radius: 14px; font-size: 13px; line-height: 1.5;">
+                <span style="font-size: 18px;">🛡️</span>
+                <div>
+                    <strong style="display: block; color: #60a5fa; margin-bottom: 2px;">Administrator Notice:</strong>
+                    <span class="admin-notice-text">
+                        Staff & Admin accounts are provisioned internally by hotel management. New staff accounts can be added from the Staff Directory inside the portal.
+                    </span>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 14px;">
+                <a href="javascript:void(0)" onclick="switchLoginRole('guest')" class="luxury-text-link" style="font-size: 0.85rem;">
+                    &larr; Switch to Guest Login
+                </a>
+            </div>
+        </div>
     </div>
 </section>
+
+<script>
+    function switchLoginRole(role) {
+        var tabGuest = document.getElementById('tabGuest');
+        var tabAdmin = document.getElementById('tabAdmin');
+        var guestHeader = document.getElementById('guestHeader');
+        var adminHeader = document.getElementById('adminHeader');
+        var guestFooter = document.getElementById('guestFooterSwitch');
+        var adminNotice = document.getElementById('adminNotice');
+        var usernameLabel = document.getElementById('usernameLabel');
+        var usernameInput = document.getElementById('username');
+        var submitBtn = document.getElementById('loginSubmitBtn');
+        var roleInput = document.getElementById('roleInput');
+        var nextInput = document.getElementById('nextInput');
+
+        if (role === 'admin') {
+            tabGuest.classList.remove('active');
+            tabAdmin.classList.add('active');
+            tabGuest.setAttribute('aria-selected', 'false');
+            tabAdmin.setAttribute('aria-selected', 'true');
+            guestHeader.style.display = 'none';
+            adminHeader.style.display = 'block';
+            guestFooter.style.display = 'none';
+            adminNotice.style.display = 'block';
+            usernameLabel.textContent = 'Admin / Staff Username';
+            usernameInput.placeholder = 'e.g. admin';
+            submitBtn.innerHTML = 'Access Staff Portal &rarr;';
+            roleInput.value = 'admin';
+            if (!nextInput.value || nextInput.value === '' || nextInput.value === '/') {
+                nextInput.value = '/portal/';
+            }
+        } else {
+            tabAdmin.classList.remove('active');
+            tabGuest.classList.add('active');
+            tabAdmin.setAttribute('aria-selected', 'false');
+            tabGuest.setAttribute('aria-selected', 'true');
+            adminHeader.style.display = 'none';
+            guestHeader.style.display = 'block';
+            adminNotice.style.display = 'none';
+            guestFooter.style.display = 'block';
+            usernameLabel.textContent = 'Username';
+            usernameInput.placeholder = 'Enter your username';
+            submitBtn.innerHTML = 'Sign In as Guest &rarr;';
+            roleInput.value = 'guest';
+            if (nextInput.value === '/portal/') {
+                nextInput.value = '';
+            }
+        }
+    }
+
+    // Auto-select tab if ?role=admin is in URL
+    document.addEventListener('DOMContentLoaded', function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('role') === 'admin') {
+            switchLoginRole('admin');
+        }
+
+        var pwdInput = document.getElementById('password');
+        if (pwdInput && document.querySelector('.toast-error')) {
+            pwdInput.classList.add('input-error-shake');
+            pwdInput.focus();
+            setTimeout(function() {
+                pwdInput.classList.remove('input-error-shake');
+            }, 800);
+        }
+    });
+</script>
 {% endblock %}
