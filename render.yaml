@@ -2,6 +2,7 @@ services:
   - type: web
     name: aurorahaven-hotel
     runtime: python
+    plan: free
     buildCommand: "./build.sh"
     startCommand: "cd hotelmanagement && gunicorn hotelmanagement.wsgi:application"
     envVars:
